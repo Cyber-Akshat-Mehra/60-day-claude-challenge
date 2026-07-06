@@ -1,0 +1,229 @@
+<svg viewBox="0 0 1600 1000" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#050609"/>
+    <stop offset="55%" stop-color="#0A0D14"/>
+    <stop offset="100%" stop-color="#0D1119"/>
+  </linearGradient>
+
+  <linearGradient id="skyline" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#0B1220"/>
+    <stop offset="100%" stop-color="#060811"/>
+  </linearGradient>
+
+  <radialGradient id="cyanGlow" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#4FD8FF" stop-opacity="0.55"/>
+    <stop offset="100%" stop-color="#4FD8FF" stop-opacity="0"/>
+  </radialGradient>
+
+  <radialGradient id="amberGlow" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#FFB454" stop-opacity="0.45"/>
+    <stop offset="100%" stop-color="#FFB454" stop-opacity="0"/>
+  </radialGradient>
+
+  <linearGradient id="screenGlow" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#0E2430"/>
+    <stop offset="100%" stop-color="#071219"/>
+  </linearGradient>
+
+  <linearGradient id="deskGrad" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#1A2029"/>
+    <stop offset="100%" stop-color="#0B0E14"/>
+  </linearGradient>
+
+  <linearGradient id="silhouette" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#12151C"/>
+    <stop offset="100%" stop-color="#05060A"/>
+  </linearGradient>
+
+  <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="8"/>
+  </filter>
+  <filter id="softer" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="20"/>
+  </filter>
+</defs>
+
+<!-- BACKGROUND -->
+<rect width="1600" height="1000" fill="url(#bg)"/>
+
+<!-- CITY SKYLINE THROUGH WINDOW -->
+<g opacity="0.85">
+  <rect x="0" y="0" width="1600" height="560" fill="url(#skyline)"/>
+  <!-- distant buildings -->
+  <g fill="#0D1526">
+    <rect x="60" y="220" width="70" height="340"/>
+    <rect x="150" y="160" width="55" height="400"/>
+    <rect x="220" y="260" width="90" height="300"/>
+    <rect x="330" y="120" width="60" height="440"/>
+    <rect x="410" y="200" width="80" height="360"/>
+    <rect x="1180" y="180" width="70" height="380"/>
+    <rect x="1270" y="240" width="55" height="320"/>
+    <rect x="1340" y="140" width="90" height="420"/>
+    <rect x="1450" y="220" width="60" height="340"/>
+    <rect x="1520" y="180" width="55" height="380"/>
+  </g>
+  <!-- lit windows -->
+  <g fill="#FFB454" opacity="0.55">
+    <rect x="70" y="250" width="6" height="10"/>
+    <rect x="85" y="300" width="6" height="10"/>
+    <rect x="160" y="200" width="6" height="10"/>
+    <rect x="175" y="260" width="6" height="10"/>
+    <rect x="230" y="300" width="6" height="10"/>
+    <rect x="340" y="180" width="6" height="10"/>
+    <rect x="360" y="260" width="6" height="10"/>
+    <rect x="420" y="240" width="6" height="10"/>
+  </g>
+  <g fill="#4FD8FF" opacity="0.45">
+    <rect x="1190" y="220" width="6" height="10"/>
+    <rect x="1210" y="280" width="6" height="10"/>
+    <rect x="1290" y="280" width="6" height="10"/>
+    <rect x="1350" y="180" width="6" height="10"/>
+    <rect x="1370" y="260" width="6" height="10"/>
+    <rect x="1460" y="260" width="6" height="10"/>
+    <rect x="1530" y="220" width="6" height="10"/>
+  </g>
+  <!-- haze -->
+  <rect x="0" y="380" width="1600" height="180" fill="#0A0D14" opacity="0.6"/>
+</g>
+
+<!-- ATMOSPHERIC GLOWS -->
+<ellipse cx="800" cy="520" rx="700" ry="260" fill="url(#cyanGlow)" filter="url(#softer)"/>
+<ellipse cx="500" cy="620" rx="300" ry="180" fill="url(#amberGlow)" filter="url(#softer)"/>
+
+<!-- WINDOW FRAME -->
+<rect x="0" y="0" width="1600" height="560" fill="none" stroke="#1C222E" stroke-width="10"/>
+<line x1="800" y1="0" x2="800" y2="560" stroke="#1C222E" stroke-width="8"/>
+
+<!-- FLOOR / DESK AREA -->
+<rect x="0" y="560" width="1600" height="440" fill="url(#deskGrad)"/>
+
+<!-- DESK SURFACE -->
+<path d="M 0 760 L 1600 760 L 1600 800 L 0 800 Z" fill="#181D26"/>
+<rect x="0" y="800" width="1600" height="200" fill="#0C0F15"/>
+
+<!-- MULTI MONITOR SETUP -->
+<!-- left monitor -->
+<g>
+  <rect x="140" y="440" width="380" height="260" rx="6" fill="url(#screenGlow)" stroke="#20303A" stroke-width="3"/>
+  <rect x="160" y="460" width="340" height="14" rx="2" fill="#4FD8FF" opacity="0.35"/>
+  <rect x="160" y="484" width="220" height="8" rx="2" fill="#2A4652" />
+  <rect x="160" y="500" width="300" height="8" rx="2" fill="#2A4652" />
+  <rect x="160" y="516" width="180" height="8" rx="2" fill="#2A4652" />
+  <rect x="160" y="540" width="260" height="8" rx="2" fill="#FFB454" opacity="0.5"/>
+  <rect x="160" y="556" width="310" height="8" rx="2" fill="#2A4652"/>
+  <rect x="160" y="572" width="150" height="8" rx="2" fill="#2A4652"/>
+  <rect x="160" y="596" width="250" height="8" rx="2" fill="#2A4652"/>
+  <rect x="160" y="612" width="200" height="8" rx="2" fill="#4FD8FF" opacity="0.4"/>
+  <rect x="300" y="700" width="60" height="14" fill="#20303A"/>
+  <rect x="270" y="714" width="120" height="8" fill="#161B24"/>
+</g>
+
+<!-- center monitor (larger, code/graph) -->
+<g>
+  <rect x="560" y="380" width="480" height="320" rx="6" fill="url(#screenGlow)" stroke="#25404D" stroke-width="3"/>
+  <!-- terminal lines -->
+  <rect x="585" y="405" width="200" height="10" rx="2" fill="#4FD8FF" opacity="0.55"/>
+  <rect x="585" y="428" width="330" height="8" rx="2" fill="#2A4652"/>
+  <rect x="585" y="446" width="260" height="8" rx="2" fill="#2A4652"/>
+  <rect x="585" y="464" width="300" height="8" rx="2" fill="#FFB454" opacity="0.55"/>
+  <rect x="585" y="482" width="180" height="8" rx="2" fill="#2A4652"/>
+  <rect x="585" y="500" width="340" height="8" rx="2" fill="#2A4652"/>
+  <!-- graph / diagnostic bars -->
+  <g>
+    <rect x="585" y="540" width="8" height="60" fill="#4FD8FF" opacity="0.7"/>
+    <rect x="600" y="560" width="8" height="40" fill="#4FD8FF" opacity="0.5"/>
+    <rect x="615" y="525" width="8" height="75" fill="#FFB454" opacity="0.7"/>
+    <rect x="630" y="550" width="8" height="50" fill="#4FD8FF" opacity="0.6"/>
+    <rect x="645" y="535" width="8" height="65" fill="#FFB454" opacity="0.5"/>
+    <rect x="660" y="565" width="8" height="35" fill="#4FD8FF" opacity="0.55"/>
+  </g>
+  <path d="M 700 600 L 730 560 L 760 580 L 790 520 L 820 545 L 850 500 L 880 530 L 910 480" 
+        fill="none" stroke="#FFB454" stroke-width="2.5" opacity="0.8"/>
+  <rect x="585" y="630" width="360" height="8" rx="2" fill="#2A4652"/>
+  <rect x="585" y="648" width="250" height="8" rx="2" fill="#2A4652"/>
+  <rect x="585" y="666" width="300" height="8" rx="2" fill="#4FD8FF" opacity="0.4"/>
+  <rect x="780" y="720" width="80" height="16" fill="#20303A"/>
+  <rect x="740" y="736" width="160" height="10" fill="#161B24"/>
+</g>
+
+<!-- right monitor -->
+<g>
+  <rect x="1080" y="440" width="380" height="260" rx="6" fill="url(#screenGlow)" stroke="#20303A" stroke-width="3"/>
+  <rect x="1100" y="460" width="150" height="14" rx="2" fill="#FFB454" opacity="0.5"/>
+  <rect x="1100" y="484" width="300" height="8" rx="2" fill="#2A4652"/>
+  <rect x="1100" y="500" width="230" height="8" rx="2" fill="#2A4652"/>
+  <rect x="1100" y="516" width="280" height="8" rx="2" fill="#4FD8FF" opacity="0.4"/>
+  <rect x="1100" y="540" width="180" height="8" rx="2" fill="#2A4652"/>
+  <rect x="1100" y="556" width="320" height="8" rx="2" fill="#2A4652"/>
+  <rect x="1100" y="572" width="140" height="8" rx="2" fill="#FFB454" opacity="0.4"/>
+  <rect x="1100" y="596" width="270" height="8" rx="2" fill="#2A4652"/>
+  <rect x="1100" y="612" width="220" height="8" rx="2" fill="#2A4652"/>
+  <rect x="1240" y="700" width="60" height="14" fill="#20303A"/>
+  <rect x="1210" y="714" width="120" height="8" fill="#161B24"/>
+</g>
+
+<!-- KEYBOARD / DESK ITEMS -->
+<rect x="640" y="770" width="320" height="26" rx="4" fill="#1C222C" stroke="#2A313D" stroke-width="1.5"/>
+<rect x="500" y="775" width="70" height="45" rx="6" fill="#181D26" stroke="#262D38" stroke-width="1.5"/>
+<circle cx="535" cy="797" r="12" fill="#0C0F15"/>
+<ellipse cx="1020" cy="785" rx="18" ry="10" fill="#2A231A"/>
+
+<!-- SILHOUETTE OF BUILDER AT DESK -->
+<g>
+  <!-- chair back -->
+  <path d="M 720 900 Q 700 760 780 700 Q 800 690 820 700 Q 900 760 880 900 Z" fill="url(#silhouette)"/>
+  <!-- head -->
+  <ellipse cx="800" cy="640" rx="46" ry="54" fill="url(#silhouette)"/>
+  <!-- neck/shoulders -->
+  <path d="M 730 760 Q 760 690 800 690 Q 840 690 870 760 L 890 900 L 710 900 Z" fill="url(#silhouette)"/>
+  <!-- arm reaching to keyboard -->
+  <path d="M 740 740 Q 690 770 660 795 L 690 815 Q 730 785 765 758 Z" fill="url(#silhouette)"/>
+  <path d="M 860 740 Q 910 770 940 795 L 910 815 Q 870 785 835 758 Z" fill="url(#silhouette)"/>
+</g>
+
+<!-- RIM LIGHT ON SILHOUETTE -->
+<path d="M 800 586 Q 838 592 846 640 Q 848 680 828 705" fill="none" stroke="#4FD8FF" stroke-width="2.5" opacity="0.55" filter="url(#soft)"/>
+<path d="M 780 588 Q 748 610 736 650" fill="none" stroke="#FFB454" stroke-width="2" opacity="0.35" filter="url(#soft)"/>
+
+<!-- FLOATING UI ACCENT (floating code fragment) -->
+<g opacity="0.85">
+  <rect x="1000" y="860" width="220" height="70" rx="8" fill="#11151D" stroke="#25313B" stroke-width="1.5"/>
+  <rect x="1018" y="878" width="60" height="8" rx="2" fill="#4FD8FF" opacity="0.7"/>
+  <rect x="1018" y="894" width="140" height="6" rx="2" fill="#3A4552"/>
+  <rect x="1018" y="908" width="100" height="6" rx="2" fill="#FFB454" opacity="0.6"/>
+</g>
+
+<!-- PARTICLE DUST -->
+<g fill="#4FD8FF" opacity="0.5">
+  <circle cx="300" cy="500" r="1.6"/>
+  <circle cx="1350" cy="460" r="1.4"/>
+  <circle cx="950" cy="360" r="1.8"/>
+  <circle cx="500" cy="380" r="1.3"/>
+  <circle cx="1150" cy="380" r="1.5"/>
+</g>
+<g fill="#FFB454" opacity="0.4">
+  <circle cx="420" cy="440" r="1.4"/>
+  <circle cx="1250" cy="520" r="1.6"/>
+  <circle cx="700" cy="330" r="1.3"/>
+</g>
+
+<!-- VIGNETTE -->
+<rect width="1600" height="1000" fill="url(#vignette)"/>
+<radialGradient id="vignette" cx="50%" cy="45%" r="75%">
+  <stop offset="60%" stop-color="#000000" stop-opacity="0"/>
+  <stop offset="100%" stop-color="#000000" stop-opacity="0.55"/>
+</radialGradient>
+
+<!-- TITLE OVERLAY -->
+<g>
+  <text x="80" y="90" font-family="'Space Grotesk', 'Arial', sans-serif" font-size="42" font-weight="700" fill="#E7ECF3">Ctrl + Shift + Why</text>
+  <text x="80" y="122" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="15" fill="#4FD8FF" letter-spacing="2">BUILDER &#8226; RESEARCHER &#8226; DEPTH-FIRST</text>
+</g>
+
+<!-- bottom mono strip -->
+<rect x="0" y="960" width="1600" height="40" fill="#05060A"/>
+<text x="80" y="985" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="13" fill="#4A5566">PROFILE_ID: INTERROGATOR-BUILDER-01</text>
+<text x="1350" y="985" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="13" fill="#4A5566">generated by Claude</text>
+
+</svg>
