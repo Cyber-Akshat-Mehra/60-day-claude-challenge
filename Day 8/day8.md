@@ -79,4 +79,4 @@ What's in it: 6 key metrics, 5 charts (AQI/PM2.5/PM10 comparison, ranking, distr
 Since it's monsoon season, current AQI readings are on the cleaner end (Good–Moderate) — worth re-running this in winter, when north Indian cities typically spike much higher.
 
 
-And the file is provided in Personal Environmental Health Analyzer folder
+And the file is provided name index.html
