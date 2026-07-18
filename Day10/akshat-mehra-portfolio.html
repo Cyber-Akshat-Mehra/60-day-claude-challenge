@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Akshat Mehra — Web Developer &amp; GenAI Builder</title>
+<meta name="description" content="Akshat Mehra is a Web Developer and GenAI Builder from Noida, India, specializing in the MERN stack, REST APIs, and emerging AI &amp; cybersecurity technologies." />
+<meta name="keywords" content="Akshat Mehra, Web Developer, GenAI Builder, MERN Stack Developer, Noida, Portfolio, Cybersecurity, Full Stack Developer" />
+<meta name="author" content="Akshat Mehra" />
+<meta name="robots" content="index, follow" />
+<meta property="og:title" content="Akshat Mehra — Web Developer | GenAI Builder" />
+<meta property="og:description" content="Portfolio of Akshat Mehra — Web Developer building efficient, user-focused applications with modern web tech, GenAI, and cybersecurity." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<!-- Tailwind CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          ink: '#0B1120',
+          panel: '#121A2B',
+          panel2: '#182238',
+          teal: '#2DD4BF',
+          violet: '#8B5CF6',
+          mist: '#94A3B8',
+          paper: '#F5F7FA',
+          paperPanel: '#FFFFFF',
+          paperLine: '#E2E8F0',
+        },
+        fontFamily: {
+          display: ['Space Grotesk', 'sans-serif'],
+          body: ['Inter', 'sans-serif'],
+          mono: ['JetBrains Mono', 'monospace'],
+        },
+      },
+    },
+  }
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; }
+  ::selection { background: #2DD4BF; color: #0B1120; }
+
+  .terminal-dot { width: 11px; height: 11px; border-radius: 999px; }
+
+  .cursor-blink::after {
+    content: '_';
+    animation: blink 1s step-end infinite;
+    color: #2DD4BF;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .bar-fill { transition: width 1.4s cubic-bezier(.16,1,.3,1); }
+
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .7s ease, transform .7s ease;
+  }
+  .fade-up.in-view { opacity: 1; transform: translateY(0); }
+
+  .nav-link { position: relative; }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: -4px;
+    width: 0; height: 2px;
+    background: linear-gradient(90deg, #2DD4BF, #8B5CF6);
+    transition: width .25s ease;
+  }
+  .nav-link.active::after, .nav-link:hover::after { width: 100%; }
+  .nav-link.active { color: #2DD4BF; }
+  html.light .nav-link.active { color: #0d9488; }
+
+  .grid-glow {
+    background-image:
+      linear-gradient(rgba(45,212,191,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(45,212,191,0.06) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+
+  .glow-orb {
+    filter: blur(90px);
+  }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #2DD4BF55; border-radius: 999px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+</style>
+</head>
+
+<body class="bg-ink text-slate-200 font-body antialiased selection:bg-teal selection:text-ink transition-colors duration-300" id="top">
+
+<a href="#main" class="skip-link fixed -translate-y-20 focus:translate-y-0 top-2 left-2 z-[100] bg-teal text-ink px-4 py-2 rounded-md font-mono text-sm transition-transform">Skip to content</a>
+
+<!-- ============ BACKGROUND DECOR ============ -->
+<div class="fixed inset-0 -z-10 grid-glow dark:opacity-100 opacity-0 html-light-hide"></div>
+<div class="fixed top-[-10%] right-[-10%] w-[38rem] h-[38rem] bg-violet/20 rounded-full glow-orb -z-10"></div>
+<div class="fixed bottom-[-15%] left-[-10%] w-[34rem] h-[34rem] bg-teal/10 rounded-full glow-orb -z-10"></div>
+
+<!-- ============ NAVBAR ============ -->
+<header class="fixed top-0 inset-x-0 z-50 backdrop-blur-md bg-ink/70 border-b border-white/5 transition-colors duration-300" id="navbar">
+  <nav class="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+    <a href="#top" class="font-mono font-semibold text-lg tracking-tight text-slate-100">
+      <span class="text-teal">&gt;_</span> Akshat<span class="text-violet">.</span>Mehra
+    </a>
+
+    <ul class="hidden md:flex items-center gap-8 font-mono text-sm text-slate-300">
+      <li><a href="#about" class="nav-link pb-1" data-nav>about</a></li>
+      <li><a href="#skills" class="nav-link pb-1" data-nav>skills</a></li>
+      <li><a href="#projects" class="nav-link pb-1" data-nav>projects</a></li>
+      <li><a href="#achievements" class="nav-link pb-1" data-nav>achievements</a></li>
+      <li><a href="#contact" class="nav-link pb-1" data-nav>contact</a></li>
+    </ul>
+
+    <div class="flex items-center gap-3">
+      <button id="themeToggle" aria-label="Toggle dark and light mode" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:border-teal/60 transition-colors">
+        <svg id="iconMoon" class="w-4 h-4 text-teal" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        <svg id="iconSun" class="w-4 h-4 text-amber-400 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path stroke-linecap="round" d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+      <button id="menuToggle" class="md:hidden w-10 h-10 rounded-full border border-white/10 flex items-center justify-center" aria-label="Open menu">
+        <svg class="w-5 h-5 text-slate-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- mobile menu -->
+  <div id="mobileMenu" class="md:hidden hidden border-t border-white/5 bg-ink/95 backdrop-blur px-5 py-4">
+    <ul class="flex flex-col gap-4 font-mono text-sm text-slate-300">
+      <li><a href="#about" class="mobile-nav block py-1">about</a></li>
+      <li><a href="#skills" class="mobile-nav block py-1">skills</a></li>
+      <li><a href="#projects" class="mobile-nav block py-1">projects</a></li>
+      <li><a href="#achievements" class="mobile-nav block py-1">achievements</a></li>
+      <li><a href="#contact" class="mobile-nav block py-1">contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============ HERO ============ -->
+<section class="min-h-screen flex items-center pt-28 pb-16 px-5 sm:px-8" id="hero">
+  <div class="max-w-6xl mx-auto w-full grid lg:grid-cols-2 gap-14 items-center">
+
+    <!-- left -->
+    <div class="fade-up">
+      <p class="font-mono text-teal text-sm mb-4 flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-teal animate-pulse"></span>
+        online &amp; open to opportunities
+      </p>
+      <h1 class="font-display font-semibold text-4xl sm:text-5xl lg:text-6xl leading-[1.08] text-slate-50">
+        Akshat Mehra
+      </h1>
+      <p class="mt-4 font-mono text-lg sm:text-xl text-mist h-8">
+        <span id="typedRole"></span><span class="cursor-blink"></span>
+      </p>
+
+      <p class="mt-6 text-slate-300 max-w-md leading-relaxed">
+        I build efficient, user-focused web applications — and I'm expanding
+        into Generative AI and Cybersecurity to engineer solutions that are
+        both intelligent and secure.
+      </p>
+
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a href="#projects" class="px-6 py-3 rounded-lg bg-teal text-ink font-semibold text-sm hover:bg-teal/90 transition-colors">View Projects</a>
+        <a href="#contact" class="px-6 py-3 rounded-lg border border-white/15 text-slate-100 font-semibold text-sm hover:border-teal/60 hover:text-teal transition-colors">Get in Touch</a>
+      </div>
+
+      <div class="mt-9 flex items-center gap-5">
+        <a href="https://github.com/Cyber-Akshat-Mehra" target="_blank" rel="noopener" aria-label="GitHub" class="w-11 h-11 rounded-full border border-white/10 flex items-center justify-center hover:border-teal/60 hover:text-teal transition-colors text-slate-300">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.4 7.86 10.93.58.1.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.04-.72.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 015.79 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.76.12 3.05.74.8 1.18 1.83 1.18 3.09 0 4.43-2.71 5.4-5.28 5.69.42.36.78 1.08.78 2.18 0 1.57-.01 2.84-.01 3.23 0 .31.21.67.8.56A10.52 10.52 0 0023.5 12c0-6.35-5.15-11.5-11.5-11.5z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/akshat-mehra-45b72529b/" target="_blank" rel="noopener" aria-label="LinkedIn" class="w-11 h-11 rounded-full border border-white/10 flex items-center justify-center hover:border-teal/60 hover:text-teal transition-colors text-slate-300">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.45 20.45h-3.56v-5.58c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 110-4.13 2.07 2.07 0 010 4.13zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+        </a>
+        <a href="mailto:cyberexpert.akshatmehra@gmail.com" aria-label="Email" class="w-11 h-11 rounded-full border border-white/10 flex items-center justify-center hover:border-teal/60 hover:text-teal transition-colors text-slate-300">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l9 6 9-6M4 6h16a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V7a1 1 0 011-1z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- right: terminal window (signature element) -->
+    <div class="fade-up" style="transition-delay:.1s">
+      <div class="rounded-xl border border-white/10 bg-panel shadow-2xl shadow-black/40 overflow-hidden">
+        <div class="flex items-center gap-2 px-4 py-3 bg-panel2 border-b border-white/5">
+          <span class="terminal-dot bg-red-400/80"></span>
+          <span class="terminal-dot bg-amber-400/80"></span>
+          <span class="terminal-dot bg-emerald-400/80"></span>
+          <span class="ml-3 font-mono text-xs text-mist">akshat@portfolio: ~</span>
+        </div>
+        <div class="p-6 font-mono text-sm leading-7 text-slate-300 min-h-[280px]" id="termBody">
+          <p><span class="text-teal">$</span> whoami</p>
+          <p class="text-slate-100 pl-4">Akshat Mehra — Web Developer, GenAI Builder</p>
+          <p class="mt-3"><span class="text-teal">$</span> cat location.txt</p>
+          <p class="text-slate-100 pl-4">Noida, India</p>
+          <p class="mt-3"><span class="text-teal">$</span> cat education.log</p>
+          <p class="text-slate-100 pl-4">BCA — Completed</p>
+          <p class="text-slate-100 pl-4">MCA — In progress</p>
+          <p class="mt-3"><span class="text-teal">$</span> ./learning.sh --now</p>
+          <p class="text-violet pl-4">Loading: Generative AI ██████████ 100%</p>
+          <p class="text-violet pl-4">Loading: Cybersecurity ██████████ 100%</p>
+          <p class="mt-3"><span class="text-teal">$</span> <span class="typing-live"></span><span class="cursor-blink"></span></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="about" class="py-24 px-5 sm:px-8 border-t border-white/5">
+  <div class="max-w-6xl mx-auto grid lg:grid-cols-5 gap-12">
+    <div class="lg:col-span-2 fade-up">
+      <p class="font-mono text-teal text-sm mb-3">01 // about</p>
+      <h2 class="font-display font-semibold text-3xl sm:text-4xl text-slate-50">Building at the intersection of web, AI &amp; security</h2>
+      <div class="mt-8 flex flex-col gap-4">
+        <div class="rounded-lg border border-white/10 bg-panel px-5 py-4">
+          <p class="font-mono text-xs text-mist">location</p>
+          <p class="text-slate-100 mt-1">Noida, India</p>
+        </div>
+        <div class="rounded-lg border border-white/10 bg-panel px-5 py-4">
+          <p class="font-mono text-xs text-mist">focus</p>
+          <p class="text-slate-100 mt-1">Web Development · GenAI · Cybersecurity</p>
+        </div>
+        <div class="rounded-lg border border-white/10 bg-panel px-5 py-4">
+          <p class="font-mono text-xs text-mist">education</p>
+          <p class="text-slate-100 mt-1">BCA (Completed) → MCA (In Progress)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:col-span-3 fade-up" style="transition-delay:.1s">
+      <div class="rounded-xl border border-white/10 bg-panel p-8">
+        <p class="font-mono text-xs text-mist mb-4">~/about.md</p>
+        <p class="text-slate-300 leading-relaxed">
+          I am a Web Developer with a strong foundation in modern web technologies
+          and a passion for building efficient, user-focused applications. I have
+          completed my Bachelor's in Computer Applications (BCA) and am currently
+          pursuing a Master of Computer Applications (MCA) to deepen my technical
+          expertise.
+        </p>
+        <p class="text-slate-300 leading-relaxed mt-4">
+          Alongside web development, I am actively learning Generative AI and
+          Cybersecurity to expand my skills in emerging technologies and secure
+          software development. I enjoy exploring new tools, solving real-world
+          problems, and continuously improving my knowledge through hands-on
+          projects and practical learning.
+        </p>
+        <p class="text-slate-300 leading-relaxed mt-4">
+          My goal is to become a versatile software professional who combines web
+          development, AI, and cybersecurity to build innovative, scalable, and
+          secure digital solutions.
+        </p>
+
+        <div class="mt-6 flex flex-wrap gap-2">
+          <span class="px-3 py-1 rounded-full bg-teal/10 text-teal font-mono text-xs border border-teal/30">Active Learner</span>
+          <span class="px-3 py-1 rounded-full bg-violet/10 text-violet font-mono text-xs border border-violet/30">Leadership</span>
+          <span class="px-3 py-1 rounded-full bg-teal/10 text-teal font-mono text-xs border border-teal/30">Communication</span>
+          <span class="px-3 py-1 rounded-full bg-violet/10 text-violet font-mono text-xs border border-violet/30">Decision Making</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SKILLS ============ -->
+<section id="skills" class="py-24 px-5 sm:px-8 border-t border-white/5">
+  <div class="max-w-6xl mx-auto">
+    <p class="font-mono text-teal text-sm mb-3 fade-up">02 // skills</p>
+    <h2 class="font-display font-semibold text-3xl sm:text-4xl text-slate-50 fade-up">Technical toolkit</h2>
+
+    <div class="mt-12 grid lg:grid-cols-2 gap-6">
+      <!-- bars -->
+      <div class="rounded-xl border border-white/10 bg-panel p-8 fade-up">
+        <p class="font-mono text-xs text-mist mb-6">core-proficiency.json</p>
+        <div class="flex flex-col gap-6" id="barsWrap">
+
+          <div>
+            <div class="flex justify-between font-mono text-sm mb-2"><span class="text-slate-200">JavaScript / React / Node.js</span><span class="text-teal">92%</span></div>
+            <div class="h-2 rounded-full bg-white/5 overflow-hidden"><div class="bar-fill h-full w-0 rounded-full bg-gradient-to-r from-teal to-violet" data-width="92"></div></div>
+          </div>
+
+          <div>
+            <div class="flex justify-between font-mono text-sm mb-2"><span class="text-slate-200">HTML5 / Tailwind CSS</span><span class="text-teal">95%</span></div>
+            <div class="h-2 rounded-full bg-white/5 overflow-hidden"><div class="bar-fill h-full w-0 rounded-full bg-gradient-to-r from-teal to-violet" data-width="95"></div></div>
+          </div>
+
+          <div>
+            <div class="flex justify-between font-mono text-sm mb-2"><span class="text-slate-200">Express.js / REST APIs</span><span class="text-teal">88%</span></div>
+            <div class="h-2 rounded-full bg-white/5 overflow-hidden"><div class="bar-fill h-full w-0 rounded-full bg-gradient-to-r from-teal to-violet" data-width="88"></div></div>
+          </div>
+
+          <div>
+            <div class="flex justify-between font-mono text-sm mb-2"><span class="text-slate-200">MongoDB / MySQL / PostgreSQL</span><span class="text-teal">85%</span></div>
+            <div class="h-2 rounded-full bg-white/5 overflow-hidden"><div class="bar-fill h-full w-0 rounded-full bg-gradient-to-r from-teal to-violet" data-width="85"></div></div>
+          </div>
+
+          <div>
+            <div class="flex justify-between font-mono text-sm mb-2"><span class="text-slate-200">C / C++ / Python / DSA / OOPs</span><span class="text-teal">80%</span></div>
+            <div class="h-2 rounded-full bg-white/5 overflow-hidden"><div class="bar-fill h-full w-0 rounded-full bg-gradient-to-r from-teal to-violet" data-width="80"></div></div>
+          </div>
+
+          <div>
+            <div class="flex justify-between font-mono text-sm mb-2"><span class="text-slate-200">Generative AI &amp; Cybersecurity</span><span class="text-violet">Learning</span></div>
+            <div class="h-2 rounded-full bg-white/5 overflow-hidden"><div class="bar-fill h-full w-0 rounded-full bg-gradient-to-r from-violet to-teal" data-width="55"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- tags -->
+      <div class="flex flex-col gap-6">
+        <div class="rounded-xl border border-white/10 bg-panel p-8 fade-up" style="transition-delay:.05s">
+          <p class="font-mono text-xs text-mist mb-4">languages &amp; frameworks</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="tag">HTML5</span><span class="tag">Tailwind CSS</span><span class="tag">JavaScript</span>
+            <span class="tag">jQuery</span><span class="tag">React</span><span class="tag">EJS</span>
+            <span class="tag">Vite</span><span class="tag">Node.js</span><span class="tag">Express.js</span>
+            <span class="tag">Bcrypt.js</span><span class="tag">C</span><span class="tag">C++</span>
+            <span class="tag">Python</span><span class="tag">OOPs</span><span class="tag">DBMS</span><span class="tag">DSA</span>
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-panel p-8 fade-up" style="transition-delay:.1s">
+          <p class="font-mono text-xs text-mist mb-4">databases</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="tag">MySQL</span><span class="tag">PostgreSQL</span><span class="tag">MongoDB</span>
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-panel p-8 fade-up" style="transition-delay:.15s">
+          <p class="font-mono text-xs text-mist mb-4">tools</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="tag">VS Code</span><span class="tag">Git</span><span class="tag">GitHub</span>
+            <span class="tag">Postman</span><span class="tag">VMware</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROJECTS ============ -->
+<section id="projects" class="py-24 px-5 sm:px-8 border-t border-white/5">
+  <div class="max-w-6xl mx-auto">
+    <p class="font-mono text-teal text-sm mb-3 fade-up">03 // projects</p>
+    <h2 class="font-display font-semibold text-3xl sm:text-4xl text-slate-50 fade-up">Selected builds</h2>
+
+    <div class="mt-12 grid md:grid-cols-2 gap-6">
+
+      <article class="fade-up rounded-xl border border-white/10 bg-panel overflow-hidden group hover:border-teal/40 transition-colors">
+        <div class="flex items-center gap-2 px-4 py-3 bg-panel2 border-b border-white/5">
+          <span class="terminal-dot bg-red-400/70"></span><span class="terminal-dot bg-amber-400/70"></span><span class="terminal-dot bg-emerald-400/70"></span>
+          <span class="ml-3 font-mono text-xs text-mist">project/e-commerce-website</span>
+        </div>
+        <div class="p-7">
+          <h3 class="font-display font-semibold text-xl text-slate-50 group-hover:text-teal transition-colors">E-Commerce Website</h3>
+          <p class="text-slate-300 mt-3 leading-relaxed text-sm">
+            A responsive online store interface featuring dynamic product listings,
+            interactive components, and a smooth shopping experience built end-to-end
+            on the MERN stack.
+          </p>
+          <div class="mt-5 flex flex-wrap gap-2">
+            <span class="tag">MongoDB</span><span class="tag">Express.js</span><span class="tag">React</span><span class="tag">Node.js</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="fade-up rounded-xl border border-white/10 bg-panel overflow-hidden group hover:border-violet/40 transition-colors" style="transition-delay:.08s">
+        <div class="flex items-center gap-2 px-4 py-3 bg-panel2 border-b border-white/5">
+          <span class="terminal-dot bg-red-400/70"></span><span class="terminal-dot bg-amber-400/70"></span><span class="terminal-dot bg-emerald-400/70"></span>
+          <span class="ml-3 font-mono text-xs text-mist">project/financial-advisor</span>
+        </div>
+        <div class="p-7">
+          <h3 class="font-display font-semibold text-xl text-slate-50 group-hover:text-violet transition-colors">Financial Advisor</h3>
+          <p class="text-slate-300 mt-3 leading-relaxed text-sm">
+            A simple financial guidance tool that helps users track spending and
+            build a clearer understanding of budgeting, built as a full MERN
+            application.
+          </p>
+          <div class="mt-5 flex flex-wrap gap-2">
+            <span class="tag">MongoDB</span><span class="tag">Express.js</span><span class="tag">React</span><span class="tag">Node.js</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ ACHIEVEMENTS ============ -->
+<section id="achievements" class="py-24 px-5 sm:px-8 border-t border-white/5">
+  <div class="max-w-6xl mx-auto">
+    <p class="font-mono text-teal text-sm mb-3 fade-up">04 // achievements</p>
+    <h2 class="font-display font-semibold text-3xl sm:text-4xl text-slate-50 fade-up">Certifications &amp; milestones</h2>
+
+    <div class="mt-12 grid sm:grid-cols-2 gap-6">
+      <div class="fade-up rounded-xl border border-white/10 bg-panel p-7 flex gap-5">
+        <div class="w-12 h-12 shrink-0 rounded-lg bg-teal/10 border border-teal/30 flex items-center justify-center">
+          <svg class="w-6 h-6 text-teal" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.42A12.02 12.02 0 0112 21.02 12.02 12.02 0 015.84 10.58L12 14z"/></svg>
+        </div>
+        <div>
+          <h3 class="font-display font-semibold text-slate-50">Complete Full-Stack Web Development Bootcamp</h3>
+          <p class="text-mist text-sm mt-1">By Dr. Angela Yu</p>
+          <p class="text-slate-300 text-sm mt-3 leading-relaxed">
+            End-to-end training covering front-end, back-end, databases, and
+            deployment — the foundation of my current MERN stack workflow.
+          </p>
+        </div>
+      </div>
+
+      <div class="fade-up rounded-xl border border-white/10 bg-panel p-7 flex gap-5" style="transition-delay:.08s">
+        <div class="w-12 h-12 shrink-0 rounded-lg bg-violet/10 border border-violet/30 flex items-center justify-center">
+          <svg class="w-6 h-6 text-violet" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 4v5c0 5-3.5 8.5-7 9-3.5-.5-7-4-7-9V7l7-4z"/></svg>
+        </div>
+        <div>
+          <h3 class="font-display font-semibold text-slate-50">Currently pursuing MCA</h3>
+          <p class="text-mist text-sm mt-1">Master of Computer Applications</p>
+          <p class="text-slate-300 text-sm mt-3 leading-relaxed">
+            Deepening technical expertise in computer science fundamentals while
+            actively upskilling in Generative AI and Cybersecurity.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact" class="py-24 px-5 sm:px-8 border-t border-white/5">
+  <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12">
+    <div class="fade-up">
+      <p class="font-mono text-teal text-sm mb-3">05 // contact</p>
+      <h2 class="font-display font-semibold text-3xl sm:text-4xl text-slate-50">Let's build something</h2>
+      <p class="text-slate-300 mt-5 leading-relaxed max-w-md">
+        Open to web development roles, freelance projects, and conversations
+        about GenAI or cybersecurity. Reach out directly or send a message.
+      </p>
+
+      <div class="mt-8 flex flex-col gap-4">
+        <a href="mailto:cyberexpert.akshatmehra@gmail.com" class="flex items-center gap-4 rounded-lg border border-white/10 bg-panel px-5 py-4 hover:border-teal/40 transition-colors group">
+          <svg class="w-5 h-5 text-teal shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l9 6 9-6M4 6h16a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V7a1 1 0 011-1z"/></svg>
+          <span class="font-mono text-sm text-slate-200 group-hover:text-teal transition-colors break-all">cyberexpert.akshatmehra@gmail.com</span>
+        </a>
+        <a href="https://www.linkedin.com/in/akshat-mehra-45b72529b/" target="_blank" rel="noopener" class="flex items-center gap-4 rounded-lg border border-white/10 bg-panel px-5 py-4 hover:border-teal/40 transition-colors group">
+          <svg class="w-5 h-5 text-teal shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M20.45 20.45h-3.56v-5.58c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 110-4.13 2.07 2.07 0 010 4.13zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+          <span class="font-mono text-sm text-slate-200 group-hover:text-teal transition-colors">linkedin.com/in/akshat-mehra</span>
+        </a>
+        <a href="https://github.com/Cyber-Akshat-Mehra" target="_blank" rel="noopener" class="flex items-center gap-4 rounded-lg border border-white/10 bg-panel px-5 py-4 hover:border-teal/40 transition-colors group">
+          <svg class="w-5 h-5 text-teal shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.4 7.86 10.93.58.1.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.04-.72.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 015.79 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.76.12 3.05.74.8 1.18 1.83 1.18 3.09 0 4.43-2.71 5.4-5.28 5.69.42.36.78 1.08.78 2.18 0 1.57-.01 2.84-.01 3.23 0 .31.21.67.8.56A10.52 10.52 0 0023.5 12c0-6.35-5.15-11.5-11.5-11.5z"/></svg>
+          <span class="font-mono text-sm text-slate-200 group-hover:text-teal transition-colors">github.com/Cyber-Akshat-Mehra</span>
+        </a>
+        <div class="flex items-center gap-4 rounded-lg border border-white/10 bg-panel px-5 py-4">
+          <svg class="w-5 h-5 text-teal shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-6.1-7-11a7 7 0 1114 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          <span class="font-mono text-sm text-slate-200">Noida, India</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="fade-up" style="transition-delay:.1s">
+      <form id="contactForm" class="rounded-xl border border-white/10 bg-panel p-8 flex flex-col gap-5" onsubmit="return handleSubmit(event)">
+        <div>
+          <label for="name" class="font-mono text-xs text-mist">name</label>
+          <input required id="name" name="name" type="text" placeholder="Your name" class="mt-2 w-full bg-panel2 border border-white/10 rounded-lg px-4 py-3 text-slate-100 placeholder:text-mist/60 focus:outline-none focus:border-teal/60 transition-colors" />
+        </div>
+        <div>
+          <label for="email" class="font-mono text-xs text-mist">email</label>
+          <input required id="email" name="email" type="email" placeholder="you@example.com" class="mt-2 w-full bg-panel2 border border-white/10 rounded-lg px-4 py-3 text-slate-100 placeholder:text-mist/60 focus:outline-none focus:border-teal/60 transition-colors" />
+        </div>
+        <div>
+          <label for="message" class="font-mono text-xs text-mist">message</label>
+          <textarea required id="message" name="message" rows="4" placeholder="Tell me about your project..." class="mt-2 w-full bg-panel2 border border-white/10 rounded-lg px-4 py-3 text-slate-100 placeholder:text-mist/60 focus:outline-none focus:border-teal/60 transition-colors resize-none"></textarea>
+        </div>
+        <button type="submit" class="mt-1 px-6 py-3 rounded-lg bg-teal text-ink font-semibold text-sm hover:bg-teal/90 transition-colors">Send Message</button>
+        <p id="formStatus" class="font-mono text-xs text-teal hidden">Message ready — opening your mail client...</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="border-t border-white/5 py-8 px-5 sm:px-8">
+  <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+    <p class="font-mono text-xs text-mist">© <span id="year"></span> Akshat Mehra. Built with HTML, Tailwind CSS &amp; JavaScript.</p>
+    <a href="#top" class="font-mono text-xs text-mist hover:text-teal transition-colors">back to top ↑</a>
+  </div>
+</footer>
+
+<style>
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    background: rgba(148,163,184,0.08);
+    border: 1px solid rgba(148,163,184,0.18);
+    color: #cbd5e1;
+    transition: border-color .2s ease, color .2s ease;
+  }
+  .tag:hover { border-color: #2DD4BF88; color: #2DD4BF; }
+
+  /* ===== LIGHT MODE OVERRIDES ===== */
+  html.light body { background: #F5F7FA; color: #1E293B; }
+  html.light #navbar { background: rgba(245,247,250,0.8); border-color: #E2E8F0; }
+  html.light .bg-ink { background: #F5F7FA; }
+  html.light .bg-panel { background: #FFFFFF; border-color: #E2E8F0 !important; }
+  html.light .bg-panel2 { background: #F1F5F9; }
+  html.light .text-slate-50, html.light .text-slate-100, html.light .text-slate-200 { color: #1E293B; }
+  html.light .text-slate-300 { color: #475569; }
+  html.light .border-white\/5, html.light .border-white\/10, html.light .border-white\/15 { border-color: #E2E8F0; }
+  html.light .text-mist { color: #64748B; }
+  html.light .bg-white\/5 { background: #E2E8F0; }
+  html.light .grid-glow { opacity: 1; }
+  html.light .glow-orb { opacity: 0.5; }
+  html.light footer { border-color: #E2E8F0; }
+</style>
+
+<script>
+  // ===== Theme toggle =====
+  const root = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+  const iconMoon = document.getElementById('iconMoon');
+  const iconSun = document.getElementById('iconSun');
+
+  function setTheme(mode) {
+    if (mode === 'light') {
+      root.classList.add('light');
+      iconMoon.classList.add('hidden');
+      iconSun.classList.remove('hidden');
+    } else {
+      root.classList.remove('light');
+      iconMoon.classList.remove('hidden');
+      iconSun.classList.add('hidden');
+    }
+  }
+  const savedTheme = 'dark'; // in-memory default, no localStorage per artifact rules
+  setTheme(savedTheme);
+  let currentTheme = savedTheme;
+  themeToggle.addEventListener('click', () => {
+    currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    setTheme(currentTheme);
+  });
+
+  // ===== Mobile menu =====
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuToggle.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+  document.querySelectorAll('.mobile-nav').forEach(link => {
+    link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+  });
+
+  // ===== Typing animation (hero role) =====
+  const roles = [
+    'Web Developer',
+    'GenAI Builder',
+    'MERN Stack Engineer',
+    'Cybersecurity Learner'
+  ];
+  const typedEl = document.getElementById('typedRole');
+  let roleIndex = 0, charIndex = 0, deleting = false;
+
+  function typeLoop() {
+    const current = roles[roleIndex];
+    if (!deleting) {
+      charIndex++;
+      typedEl.textContent = current.slice(0, charIndex);
+      if (charIndex === current.length) {
+        deleting = true;
+        setTimeout(typeLoop, 1400);
+        return;
+      }
+    } else {
+      charIndex--;
+      typedEl.textContent = current.slice(0, charIndex);
+      if (charIndex === 0) {
+        deleting = false;
+        roleIndex = (roleIndex + 1) % roles.length;
+      }
+    }
+    setTimeout(typeLoop, deleting ? 45 : 85);
+  }
+  typeLoop();
+
+  // ===== Terminal live line =====
+  const liveMsgs = ['open to work...', 'building in public...', 'shipping code...'];
+  const liveEl = document.querySelector('.typing-live');
+  let liveIndex = 0, liveChar = 0, liveDeleting = false;
+  function liveLoop() {
+    const current = liveMsgs[liveIndex];
+    if (!liveDeleting) {
+      liveChar++;
+      liveEl.textContent = current.slice(0, liveChar);
+      if (liveChar === current.length) { liveDeleting = true; setTimeout(liveLoop, 1200); return; }
+    } else {
+      liveChar--;
+      liveEl.textContent = current.slice(0, liveChar);
+      if (liveChar === 0) { liveDeleting = false; liveIndex = (liveIndex + 1) % liveMsgs.length; }
+    }
+    setTimeout(liveLoop, liveDeleting ? 35 : 70);
+  }
+  liveLoop();
+
+  // ===== Scroll reveal + animated bars =====
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.bar-fill').forEach(bar => {
+          bar.style.width = bar.dataset.width + '%';
+        });
+        barObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  const barsWrap = document.getElementById('barsWrap');
+  if (barsWrap) barObserver.observe(barsWrap);
+
+  // ===== Active nav highlighting =====
+  const sections = ['hero','about','skills','projects','achievements','contact'].map(id => document.getElementById(id));
+  const navLinks = document.querySelectorAll('[data-nav]');
+  function updateActiveNav() {
+    let current = sections[0].id;
+    sections.forEach(sec => {
+      const rect = sec.getBoundingClientRect();
+      if (rect.top <= 120) current = sec.id;
+    });
+    navLinks.forEach(link => {
+      link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+    });
+  }
+  window.addEventListener('scroll', updateActiveNav);
+  updateActiveNav();
+
+  // ===== Contact form (mailto handoff) =====
+  function handleSubmit(e) {
+    e.preventDefault();
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const message = document.getElementById('message').value;
+    const subject = encodeURIComponent('Portfolio contact from ' + name);
+    const body = encodeURIComponent(message + '\n\n— ' + name + ' (' + email + ')');
+    const status = document.getElementById('formStatus');
+    status.classList.remove('hidden');
+    window.location.href = `mailto:cyberexpert.akshatmehra@gmail.com?subject=${subject}&body=${body}`;
+    return false;
+  }
+
+  // ===== Footer year =====
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
