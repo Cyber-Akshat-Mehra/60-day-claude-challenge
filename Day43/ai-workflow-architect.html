@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Workflow Architect — Portfolio Collection Build Path</title>
+<style>
+  :root{
+    --bg:#0D1117;
+    --panel:#161B22;
+    --panel-2:#1C2330;
+    --line:#2B3240;
+    --text:#E6E9EF;
+    --muted:#8B95A7;
+    --gold:#E3B341;
+    --teal:#39D2C0;
+    --danger:#F26D6D;
+    --mono: 'SF Mono', 'JetBrains Mono', Consolas, monospace;
+    --sans: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+    --radius:10px;
+    --shadow: 0 8px 30px rgba(0,0,0,0.45);
+  }
+  [data-theme="light"]{
+    --bg:#F7F7F5;
+    --panel:#FFFFFF;
+    --panel-2:#F0F1EE;
+    --line:#DCDEDC;
+    --text:#161B22;
+    --muted:#5A6270;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--text); font-family:var(--sans);
+    transition:background .3s, color .3s;
+  }
+  ::selection{background:var(--gold); color:#111;}
+  a{color:var(--teal);}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 24px;}
+
+  /* HEADER */
+  header.top{
+    position:sticky; top:0; z-index:50; backdrop-filter:blur(10px);
+    background:color-mix(in srgb, var(--bg) 85%, transparent);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar{display:flex; align-items:center; justify-content:space-between; padding:14px 24px;}
+  .brand{display:flex; align-items:center; gap:10px; font-family:var(--mono); font-size:14px; letter-spacing:.5px;}
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--gold); box-shadow:0 0 10px var(--gold);}
+  .tabs{display:flex; gap:4px; overflow-x:auto;}
+  .tabs button{
+    background:none;border:none;color:var(--muted); font-family:var(--mono); font-size:12.5px;
+    padding:8px 12px; border-radius:6px; cursor:pointer; white-space:nowrap; transition:.2s;
+  }
+  .tabs button:hover{color:var(--text); background:var(--panel-2);}
+  .tabs button.active{color:var(--bg); background:var(--gold); font-weight:600;}
+  .top-actions{display:flex; gap:8px; align-items:center;}
+  .icon-btn{
+    background:var(--panel-2); border:1px solid var(--line); color:var(--text);
+    width:36px;height:36px;border-radius:8px; cursor:pointer; display:flex;align-items:center;justify-content:center;
+    font-size:15px; transition:.2s;
+  }
+  .icon-btn:hover{border-color:var(--gold);}
+
+  /* HERO */
+  .hero{padding:64px 0 40px; position:relative; overflow:hidden;}
+  .hero .kicker{font-family:var(--mono); color:var(--teal); font-size:13px; letter-spacing:2px; text-transform:uppercase;}
+  .hero h1{font-size:44px; line-height:1.15; margin:14px 0 18px; max-width:820px; font-weight:800;}
+  .hero h1 span{color:var(--gold);}
+  .hero p.sub{color:var(--muted); max-width:640px; font-size:16px; line-height:1.6;}
+  .path-strip{
+    margin-top:32px; display:flex; align-items:center; gap:0; font-family:var(--mono); font-size:13px;
+    flex-wrap:wrap; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:14px 16px;
+  }
+  .path-strip .seg{color:var(--text); padding:4px 8px; background:var(--panel-2); border-radius:6px;}
+  .path-strip .arrow{color:var(--muted); padding:0 6px;}
+  .path-strip .seg.final{color:var(--bg); background:var(--gold); font-weight:700;}
+
+  .hero-stats{display:flex; gap:28px; margin-top:30px; flex-wrap:wrap;}
+  .hstat{font-family:var(--mono);}
+  .hstat b{font-size:22px; display:block; color:var(--gold);}
+  .hstat span{font-size:12px; color:var(--muted);}
+
+  section{padding:48px 0; border-bottom:1px solid var(--line);}
+  h2.section-title{font-size:26px; margin:0 0 6px; font-weight:800;}
+  p.section-desc{color:var(--muted); margin:0 0 28px; max-width:680px; font-size:14.5px;}
+
+  /* PROGRESS */
+  .progress-wrap{position:sticky; top:63px; z-index:40; background:var(--bg); padding:10px 0;}
+  .progress-bar{height:6px; background:var(--panel-2); border-radius:4px; overflow:hidden; border:1px solid var(--line);}
+  .progress-fill{height:100%; background:linear-gradient(90deg, var(--teal), var(--gold)); width:0%; transition:width .4s;}
+  .progress-label{font-family:var(--mono); font-size:11.5px; color:var(--muted); margin-top:6px; display:flex; justify-content:space-between;}
+
+  /* STAGE CARDS */
+  .stage{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    margin-bottom:22px; overflow:hidden; transition:border-color .2s;
+  }
+  .stage.done{border-color:var(--teal);}
+  .stage-head{
+    display:flex; align-items:center; gap:16px; padding:20px 22px; cursor:pointer; user-select:none;
+  }
+  .stage-num{
+    font-family:var(--mono); font-size:12px; color:var(--bg); background:var(--gold);
+    width:30px; height:30px; border-radius:7px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:700;
+  }
+  .stage.done .stage-num{background:var(--teal);}
+  .stage-title{flex:1;}
+  .stage-title h3{margin:0; font-size:17px; font-weight:700;}
+  .stage-title span{font-size:12.5px; color:var(--muted); font-family:var(--mono);}
+  .stage-toggle-check{
+    width:22px;height:22px;border-radius:6px;border:1.5px solid var(--line); flex-shrink:0; cursor:pointer;
+    display:flex;align-items:center;justify-content:center; font-size:13px; color:var(--teal); background:transparent;
+  }
+  .stage-toggle-check.checked{background:var(--teal); border-color:var(--teal); color:var(--bg); font-weight:900;}
+  .chevron{color:var(--muted); font-family:var(--mono); transition:transform .25s;}
+  .stage.open .chevron{transform:rotate(90deg);}
+  .stage-body{max-height:0; overflow:hidden; transition:max-height .35s ease;}
+  .stage.open .stage-body{max-height:4000px;}
+  .stage-inner{padding:4px 22px 26px;}
+
+  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+  .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  @media(max-width:760px){.grid-2,.grid-3{grid-template-columns:1fr;}}
+
+  .block{margin-bottom:18px;}
+  .block h4{
+    font-family:var(--mono); font-size:11.5px; text-transform:uppercase; letter-spacing:1.2px;
+    color:var(--teal); margin:0 0 8px;
+  }
+  .block ul{margin:0; padding-left:18px; font-size:14px; line-height:1.7; color:var(--text);}
+  .block p{font-size:14px; line-height:1.7; color:var(--text); margin:0;}
+
+  .tool-card{
+    background:var(--panel-2); border:1px solid var(--line); border-radius:8px; padding:12px 14px; margin-bottom:10px;
+  }
+  .tool-card .tname{font-weight:700; font-size:14px; display:flex; justify-content:space-between; align-items:center;}
+  .tool-card .ttag{font-family:var(--mono); font-size:10.5px; color:var(--bg); background:var(--gold); padding:2px 7px; border-radius:5px;}
+  .tool-card p{font-size:13px; color:var(--muted); margin:6px 0 0;}
+
+  .prompt-box{
+    background:#00000030; border:1px dashed var(--line); border-radius:8px; padding:12px 14px;
+    font-family:var(--mono); font-size:12.5px; color:var(--teal); position:relative; white-space:pre-wrap; line-height:1.6;
+  }
+  [data-theme="light"] .prompt-box{background:#00000008;}
+  .copy-btn{
+    position:absolute; top:8px; right:8px; background:var(--panel); border:1px solid var(--line);
+    color:var(--muted); font-family:var(--mono); font-size:10px; padding:4px 8px; border-radius:5px; cursor:pointer;
+  }
+  .copy-btn:hover{color:var(--gold); border-color:var(--gold);}
+
+  .mistake{color:var(--danger); font-size:14px;}
+  .time-chip{
+    display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:12px;
+    background:var(--panel-2); border:1px solid var(--line); padding:5px 10px; border-radius:6px; color:var(--gold);
+  }
+
+  textarea.note-area{
+    width:100%; min-height:70px; background:var(--panel-2); border:1px solid var(--line); border-radius:8px;
+    color:var(--text); font-family:var(--sans); font-size:13px; padding:10px; resize:vertical;
+  }
+  .bookmark-btn{
+    background:none;border:1px solid var(--line); color:var(--muted); border-radius:6px; padding:6px 10px;
+    font-size:12px; cursor:pointer; font-family:var(--mono); margin-top:8px;
+  }
+  .bookmark-btn.active{color:var(--gold); border-color:var(--gold);}
+
+  /* DIAGRAM */
+  .diagram{
+    display:flex; align-items:center; gap:0; overflow-x:auto; padding:24px 4px; background:var(--panel);
+    border:1px solid var(--line); border-radius:var(--radius);
+  }
+  .dnode{
+    flex-shrink:0; min-width:150px; background:var(--panel-2); border:1px solid var(--line); border-radius:8px;
+    padding:14px; text-align:center; font-size:13px; cursor:pointer; transition:.2s;
+  }
+  .dnode:hover{border-color:var(--gold); transform:translateY(-3px);}
+  .dnode b{display:block; font-size:13px; margin-bottom:4px;}
+  .dnode span{font-size:11px; color:var(--muted);}
+  .dline{flex-shrink:0; width:36px; height:2px; background:var(--line); position:relative;}
+  .dline::after{content:'▶'; position:absolute; right:-6px; top:-8px; color:var(--muted); font-size:10px;}
+
+  /* DECISION TREE */
+  .decision{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:22px;}
+  .dq{font-weight:700; margin-bottom:12px; font-size:15px;}
+  .dopts{display:flex; gap:12px; flex-wrap:wrap;}
+  .dopt{
+    background:var(--panel-2); border:1px solid var(--line); padding:10px 16px; border-radius:8px;
+    cursor:pointer; font-size:13.5px; transition:.2s;
+  }
+  .dopt:hover{border-color:var(--teal); color:var(--teal);}
+  .dresult{margin-top:16px; padding:14px; background:var(--panel-2); border-left:3px solid var(--gold); border-radius:6px; font-size:14px; display:none;}
+  .dresult.show{display:block;}
+
+  /* COMPARISON TABLE */
+  table.cmp{width:100%; border-collapse:collapse; font-size:13.5px;}
+  table.cmp th, table.cmp td{border:1px solid var(--line); padding:10px 12px; text-align:left;}
+  table.cmp th{background:var(--panel-2); font-family:var(--mono); font-size:11.5px; text-transform:uppercase; color:var(--teal);}
+  table.cmp tr:nth-child(even) td{background:var(--panel-2);}
+
+  .pill-list{display:flex; flex-wrap:wrap; gap:8px;}
+  .pill{
+    background:var(--panel-2); border:1px solid var(--line); padding:6px 12px; border-radius:20px; font-size:12.5px;
+    font-family:var(--mono);
+  }
+
+  footer{padding:50px 0 80px;}
+  .print-btn{
+    background:var(--gold); color:var(--bg); border:none; padding:10px 18px; border-radius:8px;
+    font-weight:700; cursor:pointer; font-size:13px;
+  }
+  .fab{
+    position:fixed; bottom:24px; right:24px; z-index:60; background:var(--gold); color:var(--bg);
+    border:none; width:52px; height:52px; border-radius:50%; font-size:20px; cursor:pointer; box-shadow:var(--shadow);
+  }
+  @media print{
+    header, .fab, .progress-wrap, .icon-btn, .copy-btn, .bookmark-btn{display:none !important;}
+    .stage-body{max-height:none !important;}
+    body{background:#fff; color:#000;}
+  }
+  @media(max-width:640px){
+    .hero h1{font-size:30px;}
+    .diagram{flex-direction:column; align-items:stretch;}
+    .dline{width:2px; height:24px; margin:0 auto;}
+    .dline::after{content:'▼'; left:-4px; top:auto; bottom:-8px; right:auto;}
+  }
+</style>
+</head>
+<body data-theme="dark">
+
+<header class="top">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> AI WORKFLOW ARCHITECT</div>
+    <nav class="tabs" id="tabNav"></nav>
+    <div class="top-actions">
+      <button class="icon-btn" id="themeToggle" title="Toggle theme">🌙</button>
+      <button class="icon-btn" onclick="window.print()" title="Print">🖨</button>
+    </div>
+  </div>
+  <div class="progress-wrap wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label"><span id="progressText">0 / 6 stages complete</span><span>Portfolio Collection Build Path</span></div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="kicker">Software Development / Full-Stack / Portfolio</div>
+    <h1>Build a <span>multi-project portfolio</span> that actually gets you hired.</h1>
+    <p class="sub">An end-to-end, AI-assisted workflow for planning, building, and shipping a collection of small full-stack projects — from idea selection to deployment and the story you tell about it in interviews.</p>
+    <div class="path-strip">
+      <span class="seg">Software Development</span><span class="arrow">→</span>
+      <span class="seg">Full-Stack</span><span class="arrow">→</span>
+      <span class="seg">Portfolio / Personal Project</span><span class="arrow">→</span>
+      <span class="seg final">Multi-Project Collection</span>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><b>6</b><span>Stages, planning → showcase</span></div>
+      <div class="hstat"><b>3–6</b><span>Small projects recommended</span></div>
+      <div class="hstat"><b>~6–10 wks</b><span>Realistic total timeline</span></div>
+      <div class="hstat"><b>18+</b><span>AI tools mapped to tasks</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="diagram-section">
+  <div class="wrap">
+    <h2 class="section-title">Workflow at a Glance</h2>
+    <p class="section-desc">Click any node to jump to that stage.</p>
+    <div class="diagram" id="diagramRow"></div>
+  </div>
+</section>
+
+<section id="stages-section">
+  <div class="wrap">
+    <h2 class="section-title">The Full Workflow</h2>
+    <p class="section-desc">Expand each stage. Check it off as you complete it — your progress is saved locally in your browser.</p>
+    <div id="stagesContainer"></div>
+  </div>
+</section>
+
+<section id="decision-section">
+  <div class="wrap">
+    <h2 class="section-title">Decision Helper</h2>
+    <p class="section-desc">Not sure what to pick? Answer this to get a recommendation.</p>
+    <div class="decision">
+      <div class="dq">Which project types should fill your collection?</div>
+      <div class="dopts">
+        <div class="dopt" data-r="Pick: (1) a CRUD app with auth, (2) a data-viz/API-consumer app, (3) a small SaaS-style tool with a clear niche. This trio proves range: backend modeling, external integration, and product thinking.">Applying for startups / early-stage roles</div>
+        <div class="dopt" data-r="Pick: (1) a component-heavy UI showcase, (2) a performance-optimized app (Lighthouse scores documented), (3) a design-system or accessibility-focused build. Emphasize polish and code quality over novelty.">Applying for larger/product companies</div>
+        <div class="dopt" data-r="Pick 1–2 deep projects instead of 3–6 shallow ones: one substantial app with tests, CI/CD, and a documented architecture decision record. Depth signals seniority better than breadth.">I already have 3+ years experience</div>
+      </div>
+      <div class="dresult" id="decisionResult"></div>
+    </div>
+  </div>
+</section>
+
+<section id="summary-section">
+  <div class="wrap">
+    <h2 class="section-title">Workflow Summary</h2>
+    <p class="section-desc">The whole path in one paragraph.</p>
+    <div class="block">
+      <p>Start by scoping 3–6 small, distinct full-stack projects chosen for range (CRUD, API-integration, real-time/data, and one polish piece) rather than random ideas. Plan each one's architecture before coding using an AI pair-planner, then build in short, testable increments with an AI coding assistant embedded in your editor. Along the way, write documentation and tests as you go rather than after. Deploy each project continuously so it's always demoable. Finally, package the whole collection into one cohesive portfolio site with consistent case-study writeups, then rehearse how you'll talk about technical decisions in interviews.</p>
+    </div>
+
+    <h2 class="section-title" style="margin-top:36px;">Recommended AI Stack</h2>
+    <div class="pill-list" id="stackPills"></div>
+
+    <div class="grid-2" style="margin-top:32px;">
+      <div>
+        <h2 class="section-title">Learning Resources</h2>
+        <div class="block"><ul id="learnList"></ul></div>
+      </div>
+      <div>
+        <h2 class="section-title">Communities</h2>
+        <div class="block"><ul id="commList"></ul></div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:12px;">
+      <div>
+        <h2 class="section-title">Search Keywords</h2>
+        <div class="block"><div class="pill-list" id="kwPills"></div></div>
+      </div>
+      <div>
+        <h2 class="section-title">Future Automation Opportunities</h2>
+        <div class="block"><ul id="futureList"></ul></div>
+      </div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:32px;">Additional AI Prompts</h2>
+    <div class="grid-2" id="extraPrompts"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <button class="print-btn" onclick="window.print()">Print / Save as PDF Guide</button>
+    <p style="color:var(--muted); font-size:12.5px; margin-top:16px;">Your checkboxes, notes, and bookmarks are stored only in this browser (localStorage) — nothing is sent anywhere.</p>
+  </div>
+</footer>
+
+<button class="fab" id="scrollTop" title="Back to top">↑</button>
+
+<script>
+/* ---------------- DATA ---------------- */
+const STAGES = [
+  {
+    id:'plan', title:'Scope & Plan the Collection', time:'2–3 days',
+    objectives:['Define 3–6 project concepts that together demonstrate range','Decide the tech stack you will reuse across projects for consistency','Set a realistic timeline and portfolio narrative before writing code'],
+    tasks:['Brainstorm 10+ project ideas, filter down to 3–6 by "what skill does this prove?"','Write a one-paragraph spec per project: problem, users, core feature, stack','Pick one consistent stack (e.g. React + Node/Express + Postgres) to reuse','Draft a rough Gantt-style timeline across all projects'],
+    tools:[
+      {name:'Claude (Sonnet/Opus)', tag:'Planning', why:'Strong at structured brainstorming, comparing project ideas against your stated goals, and drafting specs in one pass.', alt:'ChatGPT, Gemini'},
+      {name:'Notion AI', tag:'Organizing', why:'Keeps specs, timelines, and notes for all projects in one linked workspace with AI-assisted summarizing.', alt:'Obsidian + Smart Connections plugin'}
+    ],
+    prompts:['I want to build a 4-project full-stack portfolio for a mid-level developer role. Suggest project ideas that together prove: backend data modeling, third-party API integration, real-time features, and UI polish. Give each idea a name, core feature, and stack.'],
+    best:['Choose diversity of skills over similar CRUD apps repeated 4 times','Write the "why this project" reasoning down — you will reuse it in interviews','Cap scope per project to something buildable in 1–2 weeks'],
+    mistakes:['Picking projects that are all the same shape (4 to-do apps)','Starting to code before writing a one-paragraph spec','Choosing a different stack per project — it triples your learning curve'],
+    outputs:['A one-page plan with 3–6 project specs','A shared tech stack decision','A rough timeline'],
+    efficiency:'Batch all idea generation into a single AI conversation so ideas can be compared against each other directly, instead of separate chats per idea.'
+  },
+  {
+    id:'architect', title:'Architect Each Project', time:'1–2 days per project',
+    objectives:['Turn each spec into a concrete data model, routes, and component tree','Decide auth, database, and deployment target before coding'],
+    tasks:['Sketch entity-relationship model for data-driven projects','List API endpoints / routes needed','Sketch component hierarchy for the frontend','Choose hosting (Vercel/Render/Railway) and confirm free-tier limits'],
+    tools:[
+      {name:'Claude with Projects/Artifacts', tag:'Architecture', why:'Can hold your whole spec in context and generate a coherent schema + route list + component tree together, so pieces stay consistent.', alt:'ChatGPT with custom GPT, Cursor chat'},
+      {name:'dbdiagram.io (AI-assisted)', tag:'Data modeling', why:'Fast visual ER diagrams you can iterate on with plain-English edits.', alt:'drawSQL'}
+    ],
+    prompts:['Here is my project spec: [paste]. Design a Postgres schema (tables, columns, relations), a REST API route list, and a React component tree. Flag any ambiguous requirements before finalizing.'],
+    best:['Always design the data model before the UI','Write down auth strategy (session vs JWT) once, reuse it across projects','Keep API contracts written down — you will thank yourself when connecting frontend'],
+    mistakes:['Letting the AI invent requirements you never specified — always confirm assumptions','Skipping the schema step and improvising tables mid-build'],
+    outputs:['ER diagram', 'Route list', 'Component tree sketch'],
+    efficiency:'Reuse one architecture prompt template across all projects — swap only the spec — for consistent, comparable output.'
+  },
+  {
+    id:'build', title:'Build in AI-Assisted Increments', time:'1–2 weeks per project',
+    objectives:['Implement backend and frontend in small, testable slices','Keep an AI coding assistant in the loop without losing understanding of your own code'],
+    tasks:['Scaffold project structure','Implement one vertical slice at a time (one feature, full-stack, working end to end)','Write tests alongside features, not after','Commit frequently with meaningful messages'],
+    tools:[
+      {name:'Cursor', tag:'IDE + AI pair programmer', why:'Inline multi-file edits with full codebase context; best for iterative full-stack builds where changes span frontend and backend.', alt:'GitHub Copilot, Windsurf'},
+      {name:'Claude Code', tag:'Terminal agent', why:'Good for larger refactors, scaffolding boilerplate, and running/fixing tests autonomously across a repo.', alt:'Aider'},
+      {name:'GitHub Copilot', tag:'Autocomplete', why:'Fast inline suggestions for repetitive code once architecture is settled.', alt:'Supermaven'}
+    ],
+    prompts:['Implement the [feature] vertical slice: API route, controller, DB query, and the React component that calls it. Use the schema and conventions already in this repo. Include one test.'],
+    best:['One feature = one complete slice (DB → API → UI) before moving on','Ask the AI to explain unfamiliar code it generates — don\'t paste blindly','Run tests after every slice, not at the end'],
+    mistakes:['Accepting large AI-generated diffs without reading them','Building all backend first, then all frontend — you lose the ability to test end to end early','Skipping git commits until "it\'s done"'],
+    outputs:['Working feature slices, each demoable','A growing test suite','Clean commit history'],
+    efficiency:'Ask your AI assistant to write the test first, then the implementation — catches spec ambiguity earlier.'
+  },
+  {
+    id:'polish', title:'Polish, Document & Optimize', time:'2–4 days per project',
+    objectives:['Make each project look and perform like a finished product, not a tutorial exercise','Write documentation that explains decisions, not just setup steps'],
+    tasks:['Run a Lighthouse/accessibility pass and fix top issues','Write a README with architecture rationale, not just install steps','Add loading/error/empty states throughout the UI','Take polished screenshots or a short demo GIF'],
+    tools:[
+      {name:'Claude', tag:'Docs & UX copy', why:'Writes clear README architecture sections and reviews UI copy for consistency and plain language.', alt:'ChatGPT'},
+      {name:'Lighthouse (Chrome DevTools)', tag:'Performance audit', why:'Free, built-in, gives concrete numbers to fix and later cite in interviews.', alt:'WebPageTest'},
+      {name:'v0 by Vercel', tag:'UI polish', why:'Generates polished component variants fast when a screen feels visually flat.', alt:'Claude with frontend focus'}
+    ],
+    prompts:['Review this README for a portfolio project. Rewrite the "Architecture" section to clearly explain why I chose [stack/pattern], in plain, confident language for a technical reviewer.'],
+    best:['Document trade-offs you made, not just what the code does','Fix accessibility basics (contrast, alt text, keyboard nav) — reviewers do check','Keep a consistent visual style across all projects in the collection'],
+    mistakes:['Treating documentation as an afterthought written in 5 minutes','Leaving console errors or broken states visible in the deployed demo'],
+    outputs:['Polished README per project','Lighthouse score screenshot','Demo GIF or short video'],
+    efficiency:'Write one README template once, then fill it per project — keeps your portfolio\'s writing voice consistent.'
+  },
+  {
+    id:'deploy', title:'Deploy & Wire Up Continuously', time:'0.5–1 day per project',
+    objectives:['Get every project live and demoable, not just runnable locally','Set up simple CI so future changes deploy automatically'],
+    tasks:['Deploy frontend and backend (or full-stack host)','Connect a managed database (avoid local-only setups)','Add a basic CI pipeline (lint + test on push)','Set up a custom domain or clean subdomain naming per project'],
+    tools:[
+      {name:'Vercel', tag:'Frontend/full-stack hosting', why:'Zero-config deploys for React/Next projects with instant preview URLs per commit.', alt:'Netlify'},
+      {name:'Railway / Render', tag:'Backend + DB hosting', why:'Simple managed Postgres and backend hosting with generous free tiers for small projects.', alt:'Fly.io'},
+      {name:'GitHub Actions', tag:'CI/CD', why:'Free CI directly in your repo; AI can draft the YAML config for you.', alt:'CircleCI'}
+    ],
+    prompts:['Write a GitHub Actions workflow that runs lint and tests on every push to main for a [Node/Express + React] repo, and deploys to Vercel/Render on success.'],
+    best:['Deploy early and often — don\'t save it for the end','Use preview deployments per PR so every change is reviewable live','Keep environment variables out of the repo (use host-provided secrets)'],
+    mistakes:['Only ever running the project locally, then scrambling to deploy before an interview','Committing API keys or secrets to the repo'],
+    outputs:['Live URL per project','Working CI badge in README'],
+    efficiency:'Set up the CI template once and copy it across projects — only the deploy target changes.'
+  },
+  {
+    id:'showcase', title:'Package the Portfolio & Rehearse the Story', time:'2–3 days',
+    objectives:['Present the whole collection as one cohesive portfolio, not scattered repos','Be ready to talk fluently about decisions in each project during interviews'],
+    tasks:['Build a single portfolio site linking all projects with consistent case-study pages','Write a 3–5 sentence "what I built and why" summary per project','Rehearse answering "walk me through this project" out loud','Get one piece of outside feedback before finalizing'],
+    tools:[
+      {name:'Claude', tag:'Interview prep', why:'Can role-play a technical interviewer asking about your specific projects and probe your architecture decisions.', alt:'ChatGPT voice mode'},
+      {name:'Next.js / your own stack', tag:'Portfolio site', why:'Reuse the same stack you already know to build the portfolio shell itself — no new tech to learn at the finish line.', alt:'Astro for a lighter static site'}
+    ],
+    prompts:['Act as a technical interviewer. I\'ll describe a project I built: [paste README summary]. Ask me 5 probing questions about architecture trade-offs, then critique my answers.'],
+    best:['Lead each case study with the problem and decision, not just the tech list','Keep the portfolio\'s design consistent across all project pages','Practice explaining trade-offs out loud, not just in writing'],
+    mistakes:['Listing tech stacks with no narrative ("React, Node, Postgres") and nothing else','Never rehearsing verbally — writing it down isn\'t the same as saying it under pressure'],
+    outputs:['Live portfolio site linking every project','Rehearsed talking points per project'],
+    efficiency:'Record yourself explaining one project, transcribe it, and have AI tighten the wording — faster than writing prose from scratch.'
+  }
+];
+
+const STACK = ['Claude','Cursor','GitHub Copilot','Claude Code','v0 by Vercel','Notion AI','GitHub Actions','Vercel','Railway','Lighthouse'];
+const LEARN = ['MDN Web Docs — reference for HTML/CSS/JS fundamentals','freeCodeCamp — full-stack project-based curriculum','Fireship (YouTube) — fast tool/framework overviews','The Odin Project — structured full-stack path'];
+const COMM = ['r/webdev and r/cscareerquestions (Reddit)','Dev.to','Indie Hackers (for the SaaS-style project)','Local/virtual dev meetups via Meetup.com'];
+const KEYWORDS = ['full-stack portfolio projects 2026','portfolio project ideas for developers','how to write a project README','Lighthouse performance audit guide','deploy Node app free hosting','React project architecture best practices'];
+const FUTURE = ['Auto-generate weekly progress reports from your git commit history','Auto-post project updates to LinkedIn/Twitter on deploy via a webhook + AI-drafted caption','AI-assisted code review bot that comments on PRs before you merge','Auto-refresh portfolio site metrics (stars, uptime) via a scheduled script'];
+const EXTRA_PROMPTS = [
+  {t:'Pressure-test a project idea', p:'I\'m considering building [idea] for my portfolio. What specific technical challenges would make this interesting to a hiring manager, and what\'s the minimum scope that still proves those skills?'},
+  {t:'Debug stuck moments fast', p:'Here is the error and the relevant code: [paste]. Explain the root cause in one sentence before suggesting a fix.'},
+  {t:'Turn a project into a story', p:'Summarize this project\'s README into a 60-second verbal answer to "tell me about a project you\'re proud of," focused on one real trade-off I made.'},
+  {t:'Audit consistency across the collection', p:'Here are the READMEs for my 4 portfolio projects: [paste all]. Point out any inconsistencies in tone, structure, or claimed skills across them.'}
+];
+
+const DIAGRAM_ICONS = ['📋','🧭','🛠️','✨','🚀','🎤'];
+
+/* ---------------- STATE ---------------- */
+const LS_KEY = 'aiwa_portfolio_state_v1';
+function loadState(){ try{ return JSON.parse(localStorage.getItem(LS_KEY)) || {}; }catch(e){ return {}; } }
+function saveState(s){ localStorage.setItem(LS_KEY, JSON.stringify(s)); }
+let state = loadState();
+state.done = state.done || {};
+state.notes = state.notes || {};
+state.bookmarks = state.bookmarks || {};
+state.theme = state.theme || 'dark';
+
+/* ---------------- RENDER ---------------- */
+function renderTabs(){
+  const nav = document.getElementById('tabNav');
+  nav.innerHTML = STAGES.map((s,i)=>`<button data-jump="${s.id}">${i+1}. ${s.title.split(' ')[0]}</button>`).join('');
+  nav.querySelectorAll('button').forEach(b=>{
+    b.addEventListener('click', ()=>{ document.getElementById('stage-'+b.dataset.jump).scrollIntoView({behavior:'smooth', block:'start'}); });
+  });
+}
+
+function renderDiagram(){
+  const row = document.getElementById('diagramRow');
+  let html = '';
+  STAGES.forEach((s,i)=>{
+    html += `<div class="dnode" data-jump="${s.id}"><b>${DIAGRAM_ICONS[i]} ${s.title}</b><span>${s.time}</span></div>`;
+    if(i < STAGES.length-1) html += `<div class="dline"></div>`;
+  });
+  row.innerHTML = html;
+  row.querySelectorAll('.dnode').forEach(n=>{
+    n.addEventListener('click', ()=>{
+      const id = n.dataset.jump;
+      document.getElementById('stage-'+id).scrollIntoView({behavior:'smooth', block:'start'});
+      openStage(id);
+    });
+  });
+}
+
+function toolCardHTML(t){
+  return `<div class="tool-card">
+    <div class="tname">${t.name}<span class="ttag">${t.tag}</span></div>
+    <p>${t.why}</p>
+    <p style="margin-top:6px;"><em>Alternative: ${t.alt}</em></p>
+  </div>`;
+}
+
+function promptHTML(text, idx){
+  const id = 'p_'+idx+'_'+Math.random().toString(36).slice(2,7);
+  return `<div class="prompt-box" id="${id}">${text}<button class="copy-btn" data-copy="${id}">COPY</button></div>`;
+}
+
+function renderStages(){
+  const container = document.getElementById('stagesContainer');
+  container.innerHTML = STAGES.map((s, idx)=>{
+    const isDone = !!state.done[s.id];
+    const note = state.notes[s.id] || '';
+    const bookmarked = !!state.bookmarks[s.id];
+    return `
+    <div class="stage ${isDone?'done':''}" id="stage-${s.id}" data-id="${s.id}">
+      <div class="stage-head" data-toggle="${s.id}">
+        <div class="stage-num">${idx+1}</div>
+        <div class="stage-title"><h3>${s.title}</h3><span>${s.time}</span></div>
+        <button class="stage-toggle-check ${isDone?'checked':''}" data-check="${s.id}" title="Mark complete">${isDone?'✓':''}</button>
+        <div class="chevron">▶</div>
+      </div>
+      <div class="stage-body">
+        <div class="stage-inner">
+          <div class="grid-2">
+            <div class="block"><h4>Objectives</h4><ul>${s.objectives.map(o=>`<li>${o}</li>`).join('')}</ul></div>
+            <div class="block"><h4>Tasks</h4><ul>${s.tasks.map(o=>`<li>${o}</li>`).join('')}</ul></div>
+          </div>
+          <div class="block"><h4>Best AI Tools for This Stage</h4>${s.tools.map(toolCardHTML).join('')}</div>
+          <div class="block"><h4>Prompt Example${s.prompts.length>1?'s':''}</h4>${s.prompts.map((p,i)=>promptHTML(p,idx+'_'+i)).join('')}</div>
+          <div class="grid-2">
+            <div class="block"><h4>Best Practices</h4><ul>${s.best.map(o=>`<li>${o}</li>`).join('')}</ul></div>
+            <div class="block"><h4>Common Mistakes</h4><ul>${s.mistakes.map(o=>`<li class="mistake">${o}</li>`).join('')}</ul></div>
+          </div>
+          <div class="grid-2">
+            <div class="block"><h4>Expected Outputs</h4><ul>${s.outputs.map(o=>`<li>${o}</li>`).join('')}</ul></div>
+            <div class="block"><h4>Efficiency Tip</h4><p>${s.efficiency}</p><div style="margin-top:10px;"><span class="time-chip">⏱ ${s.time}</span></div></div>
+          </div>
+          <div class="block"><h4>Your Notes</h4>
+            <textarea class="note-area" data-note="${s.id}" placeholder="Jot down anything specific to your projects here...">${note}</textarea>
+            <button class="bookmark-btn ${bookmarked?'active':''}" data-bookmark="${s.id}">${bookmarked?'★ Bookmarked':'☆ Bookmark this stage'}</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // wire interactions
+  container.querySelectorAll('[data-toggle]').forEach(el=>{
+    el.addEventListener('click', (e)=>{
+      if(e.target.closest('[data-check]')) return;
+      const id = el.dataset.toggle;
+      document.getElementById('stage-'+id).classList.toggle('open');
+    });
+  });
+  container.querySelectorAll('[data-check]').forEach(el=>{
+    el.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const id = el.dataset.check;
+      state.done[id] = !state.done[id];
+      saveState(state);
+      renderStages();
+      updateProgress();
+      openStage(id, true);
+    });
+  });
+  container.querySelectorAll('[data-note]').forEach(el=>{
+    el.addEventListener('input', ()=>{
+      state.notes[el.dataset.note] = el.value;
+      saveState(state);
+    });
+  });
+  container.querySelectorAll('[data-bookmark]').forEach(el=>{
+    el.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const id = el.dataset.bookmark;
+      state.bookmarks[id] = !state.bookmarks[id];
+      saveState(state);
+      renderStages();
+      openStage(id, true);
+    });
+  });
+  container.querySelectorAll('[data-copy]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const box = document.getElementById(el.dataset.copy);
+      const text = box.childNodes[0].textContent;
+      navigator.clipboard.writeText(text.trim()).then(()=>{
+        el.textContent = 'COPIED';
+        setTimeout(()=>{ el.textContent='COPY'; }, 1400);
+      });
+    });
+  });
+}
+
+function openStage(id, keepScroll){
+  document.querySelectorAll('.stage').forEach(s=>{
+    if(s.dataset.id === id) s.classList.add('open');
+  });
+}
+
+function updateProgress(){
+  const total = STAGES.length;
+  const done = STAGES.filter(s=>state.done[s.id]).length;
+  document.getElementById('progressFill').style.width = (done/total*100)+'%';
+  document.getElementById('progressText').textContent = `${done} / ${total} stages complete`;
+}
+
+function renderSummarySections(){
+  document.getElementById('stackPills').innerHTML = STACK.map(t=>`<span class="pill">${t}</span>`).join('');
+  document.getElementById('learnList').innerHTML = LEARN.map(l=>`<li>${l}</li>`).join('');
+  document.getElementById('commList').innerHTML = COMM.map(l=>`<li>${l}</li>`).join('');
+  document.getElementById('kwPills').innerHTML = KEYWORDS.map(k=>`<span class="pill">${k}</span>`).join('');
+  document.getElementById('futureList').innerHTML = FUTURE.map(l=>`<li>${l}</li>`).join('');
+  document.getElementById('extraPrompts').innerHTML = EXTRA_PROMPTS.map((e,i)=>`
+    <div class="block"><h4>${e.t}</h4>${promptHTML(e.p, 'extra_'+i)}</div>
+  `).join('');
+  // wire copy buttons for extra prompts
+  document.querySelectorAll('#extraPrompts [data-copy]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const box = document.getElementById(el.dataset.copy);
+      const text = box.childNodes[0].textContent;
+      navigator.clipboard.writeText(text.trim()).then(()=>{
+        el.textContent = 'COPIED';
+        setTimeout(()=>{ el.textContent='COPY'; }, 1400);
+      });
+    });
+  });
+}
+
+function renderDecision(){
+  document.querySelectorAll('.dopt').forEach(d=>{
+    d.addEventListener('click', ()=>{
+      const res = document.getElementById('decisionResult');
+      res.textContent = d.dataset.r;
+      res.classList.add('show');
+    });
+  });
+}
+
+function applyTheme(){
+  document.body.setAttribute('data-theme', state.theme);
+  document.getElementById('themeToggle').textContent = state.theme === 'dark' ? '🌙' : '☀️';
+}
+
+document.getElementById('themeToggle').addEventListener('click', ()=>{
+  state.theme = state.theme === 'dark' ? 'light' : 'dark';
+  saveState(state);
+  applyTheme();
+});
+
+document.getElementById('scrollTop').addEventListener('click', ()=>{
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+/* ---------------- INIT ---------------- */
+renderTabs();
+renderDiagram();
+renderStages();
+renderSummarySections();
+renderDecision();
+updateProgress();
+applyTheme();
+// open first stage by default
+document.getElementById('stage-'+STAGES[0].id).classList.add('open');
+</script>
+</body>
+</html>
