@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LinkedIn Profile: Roast & Rebuild — Akshat Mehra</title>
+<style>
+  :root{
+    --bg:#1e1e2e; --panel:#252538; --panel2:#2b2b40;
+    --text:#d4d4e0; --text-dim:#8a8aa3; --text-bright:#f0f0f8;
+    --removed-bg:#3d1f24; --removed-fg:#f38ba8;
+    --added-bg:#1f3d2a; --added-fg:#7ee2a8;
+    --accent:#61afef; --accent2:#c792ea;
+    --line:#3a3a52; --mono:'Fira Code','JetBrains Mono',Consolas,monospace;
+    --sans:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;}
+  .wrap{max-width:920px;margin:0 auto;padding:0 20px 80px;}
+  .topbar{background:var(--panel);border-bottom:1px solid var(--line);padding:14px 20px;
+    display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:13px;color:var(--text-dim);}
+  .dot{width:10px;height:10px;border-radius:50%;}
+  .dot.r{background:#f38ba8;} .dot.y{background:#f9c85f;} .dot.g{background:#7ee2a8;}
+  .filename{margin-left:12px;}
+  header.hero{padding:50px 0 30px;}
+  .eyebrow{font-family:var(--mono);color:var(--accent);font-size:13px;letter-spacing:.05em;}
+  h1{font-size:32px;color:var(--text-bright);margin:8px 0 6px;font-weight:700;}
+  .sub{color:var(--text-dim);font-size:15px;}
+  .score-hero{display:flex;align-items:baseline;gap:18px;margin-top:24px;padding:20px 24px;
+    background:var(--panel);border:1px solid var(--line);border-radius:10px;}
+  .score-hero .num{font-family:var(--mono);font-size:42px;color:var(--removed-fg);font-weight:700;}
+  .score-hero .arrow{color:var(--text-dim);font-size:24px;}
+  .score-hero .num.after{color:var(--added-fg);}
+  .score-hero .label{color:var(--text-dim);font-size:13px;}
+
+  section{margin-top:48px;}
+  .sec-tag{font-family:var(--mono);font-size:12px;color:var(--accent2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+  h2{font-size:22px;color:var(--text-bright);margin:0 0 20px;font-weight:700;border-bottom:1px solid var(--line);padding-bottom:10px;}
+  h3{font-size:16px;color:var(--text-bright);margin:28px 0 10px;font-weight:700;}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:18px 20px;margin-bottom:16px;}
+  .card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .card-title{font-weight:700;color:var(--text-bright);font-size:15px;}
+  .score-pill{font-family:var(--mono);font-size:13px;padding:3px 10px;border-radius:20px;background:var(--removed-bg);color:var(--removed-fg);}
+  .reaction{font-style:italic;color:var(--text-dim);font-size:14px;margin:8px 0;}
+  .issue{margin:10px 0;font-size:14px;}
+  .issue b{color:var(--text-bright);}
+
+  .diff-line{font-family:var(--mono);font-size:13.5px;padding:6px 12px;border-radius:4px;margin:4px 0;white-space:pre-wrap;}
+  .diff-removed{background:var(--removed-bg);color:var(--removed-fg);border-left:3px solid var(--removed-fg);}
+  .diff-added{background:var(--added-bg);color:var(--added-fg);border-left:3px solid var(--added-fg);}
+
+  .tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+  .tab{font-family:var(--mono);font-size:12.5px;padding:6px 12px;border-radius:6px;background:var(--panel2);
+    color:var(--text-dim);cursor:pointer;border:1px solid var(--line);}
+  .tab.active{color:var(--accent);border-color:var(--accent);}
+  .option-block{display:none;}
+  .option-block.show{display:block;}
+
+  ul.clean{padding-left:20px;margin:8px 0;}
+  ul.clean li{margin:6px 0;font-size:14px;}
+
+  .keyword{display:inline-block;background:#2b2b45;color:var(--accent);font-family:var(--mono);
+    font-size:12px;padding:3px 8px;border-radius:4px;margin:3px 4px 3px 0;}
+
+  table.compare{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:10px;}
+  table.compare th{text-align:left;color:var(--text-dim);font-weight:500;padding:8px;border-bottom:1px solid var(--line);font-size:12px;text-transform:uppercase;}
+  table.compare td{padding:10px 8px;border-bottom:1px solid var(--line);}
+  .chip{font-family:var(--mono);padding:2px 8px;border-radius:20px;font-size:12px;}
+  .chip.before{background:var(--removed-bg);color:var(--removed-fg);}
+  .chip.after{background:var(--added-bg);color:var(--added-fg);}
+  .delta{color:var(--added-fg);font-family:var(--mono);font-weight:700;}
+
+  .day{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);
+    border-radius:6px;padding:16px 18px;margin-bottom:12px;}
+  .day-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .day-num{font-family:var(--mono);color:var(--accent);font-weight:700;}
+  .day-title{font-weight:700;color:var(--text-bright);font-size:14px;}
+  .day p, .day li{font-size:13.5px;}
+  .checklist li{list-style:none;margin:6px 0;}
+  .checklist li:before{content:"☐ ";color:var(--accent);}
+  .post-draft{background:#1a1a2b;border:1px dashed var(--line);padding:14px 16px;border-radius:6px;
+    font-size:13.5px;margin-top:8px;white-space:pre-wrap;font-family:var(--sans);}
+  .char-count{color:var(--text-dim);font-family:var(--mono);font-size:11.5px;margin-top:6px;}
+
+  .summary-card{background:linear-gradient(180deg,#252538,#1e1e2e);border:1px solid var(--accent2);
+    border-radius:12px;padding:28px;text-align:left;}
+  .summary-card h3{margin-top:0;color:var(--accent2);}
+  .summary-score{display:flex;gap:30px;margin:16px 0;}
+  .summary-score div{text-align:center;}
+  .summary-score .n{font-family:var(--mono);font-size:30px;font-weight:700;}
+  .summary-score .n.b{color:var(--removed-fg);}
+  .summary-score .n.a{color:var(--added-fg);}
+  .summary-score .l{font-size:11px;color:var(--text-dim);text-transform:uppercase;}
+  .flag{color:var(--accent);font-family:var(--mono);font-size:12px;}
+  button.copy-btn{font-family:var(--mono);background:var(--panel2);color:var(--accent);border:1px solid var(--line);
+    padding:8px 16px;border-radius:6px;cursor:pointer;font-size:12.5px;margin-top:14px;}
+  button.copy-btn:hover{border-color:var(--accent);}
+
+  .note{background:#2b2410;border-left:3px solid #f9c85f;color:#f9c85f;padding:10px 14px;border-radius:4px;font-size:13px;margin:10px 0;}
+</style>
+</head>
+<body>
+<div class="topbar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+  <span class="filename">akshat_mehra_linkedin.diff</span></div>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">// linkedin optimization report</div>
+  <h1>Your profile is running on default settings.</h1>
+  <p class="sub">Headline: blank. About: blank. Experience bullets: blank. Right now your profile is a placeholder, not a pitch — and recruiters searching "MERN stack developer" will never find you.</p>
+  <div class="score-hero">
+    <div><div class="num">16</div><div class="label">before /100</div></div>
+    <div class="arrow">→</div>
+    <div><div class="num after">84</div><div class="label">after /100</div></div>
+  </div>
+</header>
+
+<section id="part1">
+  <div class="sec-tag">Part 1</div>
+  <h2>The roast</h2>
+
+  <div class="card">
+    <div class="card-head"><span class="card-title">Headline</span><span class="score-pill">0 / 10</span></div>
+    <div class="reaction">Recruiter's 3-second reaction: "No headline? Next profile."</div>
+    <div class="issue">❌ <b>The problem:</b> It's blank. LinkedIn defaults to showing your last job title only — you have zero control over your first impression.</div>
+    <div class="issue">🧠 <b>Why it hurts:</b> Recruiters search by keyword ("MERN stack developer", "React developer"). A blank headline means you're invisible in that search, no matter how good your skills are.</div>
+    <div class="issue">🔍 <b>Invisible cost:</b> Every recruiter search this week that should've surfaced you — didn't.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="card-title">About — first 2 lines</span><span class="score-pill">0 / 10</span></div>
+    <div class="reaction">Recruiter's 3-second reaction: there's nothing to react to.</div>
+    <div class="issue">❌ <b>The problem:</b> Blank. This is the single most valuable real estate on your profile — the text shown before "see more" — and it's empty.</div>
+    <div class="issue">🧠 <b>Why it hurts:</b> A blank hook means 100% of viewers bounce before learning anything about you.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="card-title">About — full section</span><span class="score-pill">0 / 10</span></div>
+    <div class="issue">❌ <b>The problem:</b> Nothing here quantifies what you actually do — build financial tools, dashboards, full-stack apps — or who you do it for.</div>
+    <div class="issue">🔍 <b>Invisible cost:</b> Recruiters skimming can't tell you've built 3 real projects. To them, you don't exist yet as a developer with proof of work.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="card-title">Experience</span><span class="score-pill">2 / 10</span></div>
+    <div class="reaction">Recruiter's 3-second reaction: "Title only, no company, no bullets — is this even active?"</div>
+    <div class="issue">❌ <b>The problem:</b> You have a title (MERN Stack Developer) but no company listed and no bullet points describing what you actually built or shipped.</div>
+    <div class="issue">🧠 <b>Why it hurts:</b> Experience is where recruiters verify skill claims. Without bullets, "MERN Stack Developer" is just a label, not evidence.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="card-title">Skills & keywords</span><span class="score-pill" style="background:#2b2410;color:#f9c85f;">6 / 10</span></div>
+    <div class="reaction">Recruiter's 3-second reaction: "Solid stack — but is it optimized for search?"</div>
+    <div class="issue">❌ <b>The problem:</b> You have a genuinely strong, full-stack skill list (React, Node, Express, MongoDB, PostgreSQL, MySQL, DSA, OOPs) — but nothing is pinned to the top, and it's not ordered around your job-search keywords.</div>
+    <div class="issue">🧠 <b>Why it hurts:</b> LinkedIn's search algorithm and recruiter filters weight your top/pinned skills heavier. Right now your best proof points are buried.</div>
+  </div>
+
+  <div class="card" style="border-color:var(--removed-fg);">
+    <div class="card-head"><span class="card-title">Overall profile strength</span><span class="score-pill">16 / 100</span></div>
+    <p style="font-size:14px;color:var(--text-dim);margin:0;">Your skills are real. Your profile just isn't telling anyone about them yet.</p>
+  </div>
+</section>
+
+<section id="part2">
+  <div class="sec-tag">Part 2</div>
+  <h2>The rebuild</h2>
+
+  <h3>Headline — 3 options</h3>
+  <p style="font-size:13.5px;color:var(--text-dim);">Formula: [Role/Identity] | [Who I help or what I do] | [Proof or differentiator]</p>
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('h1')">Option 1 · keyword</div>
+    <div class="tab" onclick="showTab('h2')">Option 2 · value-prop</div>
+    <div class="tab" onclick="showTab('h3t')">Option 3 · authority</div>
+  </div>
+  <div class="option-block show" id="h1">
+    <div class="diff-line diff-added">+ MERN Stack Developer | React, Node.js & MongoDB | Building Full-Stack Web Apps</div>
+    <p style="font-size:13px;color:var(--text-dim);">Use this if: you want to show up when recruiters search exact stack keywords. Best default choice for active job hunting.</p>
+  </div>
+  <div class="option-block" id="h2">
+    <div class="diff-line diff-added">+ Full-Stack Developer | I Build Web Apps That Turn Ideas Into Working Products | MERN Stack</div>
+    <p style="font-size:13px;color:var(--text-dim);">Use this if: you're also open to freelance or want to sound outcome-focused rather than tech-list-focused.</p>
+  </div>
+  <div class="option-block" id="h3t">
+    <div class="diff-line diff-added">+ Full-Stack Developer (MERN) | React · Node.js · MongoDB · REST APIs | Financial & Business Web Applications</div>
+    <p style="font-size:13px;color:var(--text-dim);">Use this if: you want to hint at domain depth (fintech-adjacent, from your Financial Analyzer project) alongside the stack.</p>
+  </div>
+
+  <h3>About section — full rewrite</h3>
+  <div class="card">
+    <div class="diff-line diff-added">+ I build full-stack web applications that turn messy, everyday problems into working software.</div>
+    <div class="diff-line diff-added">+ I'm a MERN stack developer (React, Node.js, Express, MongoDB) who likes shipping complete products, not just components.</div>
+    <div class="diff-line diff-added">+ Recently, I built a Financial Analyzer that helps users track expenses, plan budgets, view live market data (Nifty, Sensex), log transactions, and get AI-based financial suggestions. I've also built and deployed a personal portfolio site and a business website for a UPVC company client.</div>
+    <div class="diff-line diff-added">+ I work across the stack: React/Tailwind on the frontend, Node/Express REST APIs on the backend, MongoDB/PostgreSQL/MySQL for data, and I'm comfortable with core CS fundamentals (DSA, OOPs, DBMS).</div>
+    <div class="diff-line diff-added">+ Open to full-stack developer roles — message me, or check the projects below.</div>
+  </div>
+  <div class="note">⚑ Add real numbers where you can: how many users tested the Financial Analyzer, how long it took to build, or any measurable result from the UPVC site. Don't fabricate — just fill these in when you have them.</div>
+  <p style="font-size:13px;color:var(--text-dim);"><b>Keywords embedded for search:</b>
+    <span class="keyword">MERN stack developer</span><span class="keyword">React</span><span class="keyword">Node.js</span>
+    <span class="keyword">Express</span><span class="keyword">MongoDB</span><span class="keyword">REST API</span>
+    <span class="keyword">full-stack</span><span class="keyword">JavaScript</span></p>
+
+  <h3>Experience — top entry rewrite</h3>
+  <div class="note">⚑ You didn't list a company. If this role is freelance/self-directed project work, label it "Independent Projects" or "Self-directed / Freelance" rather than leaving it blank — a blank company field looks unfinished to recruiters.</div>
+  <div class="card">
+    <div class="card-title" style="margin-bottom:10px;">Bullet 1</div>
+    <div class="diff-line diff-removed">- (blank — no bullet existed)</div>
+    <div class="diff-line diff-added">+ Built a full-stack Financial Analyzer (MERN) enabling users to track expenses, plan budgets, log transactions, and view live Nifty/Sensex market data in one dashboard.</div>
+    <div class="card-title" style="margin:14px 0 10px;">Bullet 2</div>
+    <div class="diff-line diff-removed">- (blank — no bullet existed)</div>
+    <div class="diff-line diff-added">+ Integrated AI-based suggestions into the Financial Analyzer to give users personalized budgeting recommendations.</div>
+    <div class="card-title" style="margin:14px 0 10px;">Bullet 3</div>
+    <div class="diff-line diff-removed">- (blank — no bullet existed)</div>
+    <div class="diff-line diff-added">+ Designed and shipped a portfolio website and a client-facing business website (UPVC company) using React/HTML/Tailwind on the frontend and Node/Express on the backend.</div>
+  </div>
+
+  <h3>Skills recommendations</h3>
+  <div class="card">
+    <p style="font-size:13.5px;color:var(--text-bright);margin-top:0;"><b>Top 10 to add (priority order, for job-hunt visibility):</b></p>
+    <ul class="clean">
+      <li>TypeScript</li><li>Next.js</li><li>Redux / Context API</li><li>Docker</li>
+      <li>Testing (Jest)</li><li>CI/CD basics</li><li>AWS or cloud fundamentals</li>
+      <li>GraphQL</li><li>Socket.io</li><li>System Design basics</li>
+    </ul>
+    <p style="font-size:13.5px;color:var(--text-bright);"><b>Deprioritize (not urgent, but not competitive keywords either):</b></p>
+    <ul class="clean"><li>jQuery — legacy, keep it but don't lead with it</li></ul>
+    <p style="font-size:13.5px;color:var(--text-bright);"><b>Pin to top 3:</b></p>
+    <ul class="clean"><li>React</li><li>Node.js</li><li>MongoDB</li></ul>
+  </div>
+</section>
+
+<section id="part3">
+  <div class="sec-tag">Part 3</div>
+  <h2>Before vs after scorecard</h2>
+  <table class="compare">
+    <tr><th>Section</th><th>Before</th><th></th><th>After</th><th>Change</th></tr>
+    <tr><td>Headline</td><td><span class="chip before">0/10</span></td><td>→</td><td><span class="chip after">8/10</span></td><td class="delta">+8</td></tr>
+    <tr><td>About (hook)</td><td><span class="chip before">0/10</span></td><td>→</td><td><span class="chip after">8/10</span></td><td class="delta">+8</td></tr>
+    <tr><td>About (full)</td><td><span class="chip before">0/10</span></td><td>→</td><td><span class="chip after">9/10</span></td><td class="delta">+9</td></tr>
+    <tr><td>Experience</td><td><span class="chip before">2/10</span></td><td>→</td><td><span class="chip after">8/10</span></td><td class="delta">+6</td></tr>
+    <tr><td>Skills/keywords</td><td><span class="chip before">6/10</span></td><td>→</td><td><span class="chip after">9/10</span></td><td class="delta">+3</td></tr>
+  </table>
+  <div class="score-hero" style="margin-top:16px;">
+    <div><div class="num">16</div><div class="label">overall before /100</div></div>
+    <div class="arrow">→</div>
+    <div><div class="num after">84</div><div class="label">overall after /100</div></div>
+    <div style="margin-left:auto;" class="delta" style="font-size:20px;">+68</div>
+  </div>
+</section>
+
+<section id="part4">
+  <div class="sec-tag">Part 4</div>
+  <h2>7-day activation plan</h2>
+
+  <div class="day">
+    <div class="day-head"><span class="day-num">Day 1</span><span class="day-title">Make all profile changes</span></div>
+    <ul class="checklist">
+      <li>Paste new headline (Option 1, 2, or 3)</li>
+      <li>Replace About section with rewrite above</li>
+      <li>Add company/label to Experience entry + 3 bullets</li>
+      <li>Add 10 new skills, remove/deprioritize jQuery from top slots</li>
+      <li>Pin React, Node.js, MongoDB to top 3</li>
+      <li>Add Financial Analyzer, Portfolio, UPVC site to Featured section</li>
+    </ul>
+  </div>
+
+  <div class="day">
+    <div class="day-head"><span class="day-num">Day 2</span><span class="day-title">Publish Post #1 — "I rebuilt my LinkedIn"</span></div>
+    <div class="post-draft">My LinkedIn was basically empty for months.
+
+No headline. No About section. No project details.
+
+So I sat down and rebuilt it from scratch — added real projects (a Financial Analyzer with live market data and AI-based suggestions, a portfolio site, a client website), rewrote my headline, and finally described what I actually do as a MERN stack developer.
+
+Turns out most of us are sitting on real work and just... not talking about it.
+
+If you're a developer and your profile still just says your job title — fix that this week. It takes an afternoon.
+
+What's one project you built that isn't on your profile yet?</div>
+    <div class="char-count">~640 characters — under the 1300 limit, room to expand if needed.</div>
+  </div>
+
+  <div class="day">
+    <div class="day-head"><span class="day-num">Day 3</span><span class="day-title">Send 10 strategic connection requests</span></div>
+    <p><b>Who to target:</b> engineering managers/recruiters at 3-5 companies you actually want to work at, other MERN/full-stack developers slightly ahead of you (for visibility), and people who post about hiring junior/mid full-stack roles.</p>
+    <div class="post-draft">Hi [Name] — I'm a MERN stack developer who just rebuilt a Financial Analyzer app with live market data. Following your work at [Company] — would love to connect.</div>
+    <div class="char-count">~180 characters — under the 300 limit.</div>
+  </div>
+
+  <div class="day">
+    <div class="day-head"><span class="day-num">Day 4</span><span class="day-title">Comment on 5 posts in your target space</span></div>
+    <p><b>Value Comment formula:</b> Agree with a specific point → Add one insight from your own experience (e.g. from building the Financial Analyzer) → Ask a genuine question. This gets you seen by the poster's audience without looking like spam.</p>
+  </div>
+
+  <div class="day">
+    <div class="day-head"><span class="day-num">Day 5</span><span class="day-title">Publish Post #2 — lessons-learned / hot take</span></div>
+    <div class="post-draft">Building a Financial Analyzer taught me something I didn't expect:
+
+The hardest part wasn't the React frontend or the Node/Express APIs. It was deciding what NOT to show the user.
+
+Live Nifty/Sensex data, budget planning, AI suggestions, transaction logs — it's easy to cram all of it onto one screen. It's much harder to make it feel simple.
+
+Hot take: most "full-stack" tutorials teach you to build features. Almost none teach you to cut them.
+
+What's a feature you built and then deleted?</div>
+    <div class="char-count">~560 characters.</div>
+  </div>
+
+  <div class="day">
+    <div class="day-head"><span class="day-num">Day 6</span><span class="day-title">Engage + 5 more connection requests</span></div>
+    <p>Reply to every comment on both posts (even a one-liner keeps the algorithm pushing your post further). Send 5 more targeted requests using the Day 3 template.</p>
+  </div>
+
+  <div class="day">
+    <div class="day-head"><span class="day-num">Day 7</span><span class="day-title">Review profile views & connection acceptance rate</span></div>
+    <p><b>What the numbers mean:</b> A jump in profile views after Day 1-2 = your headline/keywords are working. A low connection-acceptance rate (under ~30%) = your requests need to be more specific to the person, not generic. High post views but low comments = your hook is fine but your CTA/question isn't landing — try a more direct question next time.</p>
+  </div>
+</section>
+
+<section id="part5">
+  <div class="sec-tag">Part 5</div>
+  <h2>What I learned today</h2>
+  <div class="summary-card">
+    <h3>I let AI roast my LinkedIn profile today. Here's what changed:</h3>
+    <div class="summary-score">
+      <div><div class="n b">16</div><div class="l">before /100</div></div>
+      <div><div class="n a">84</div><div class="l">after /100</div></div>
+    </div>
+    <p style="font-size:14px;margin:0 0 6px;"><b>Top 3 mistakes I was making:</b></p>
+    <ol style="font-size:14px;padding-left:20px;margin:0 0 14px;">
+      <li>Blank headline — invisible in recruiter search</li>
+      <li>Blank About section — zero proof of what I actually build</li>
+      <li>Experience with no bullets — a title with nothing behind it</li>
+    </ol>
+    <p style="font-size:14px;"><b>The #1 thing that made the biggest difference:</b> Actually writing down the real projects I'd already built (Financial Analyzer, Portfolio, UPVC site) instead of leaving the profile blank while waiting to feel "impressive enough."</p>
+    <button class="copy-btn" onclick="copySummary()">Copy summary to post on LinkedIn</button>
+  </div>
+</section>
+</div>
+
+<script>
+function showTab(id){
+  document.querySelectorAll('.option-block').forEach(el=>el.classList.remove('show'));
+  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
+  document.getElementById(id).classList.add('show');
+  event.target.classList.add('active');
+}
+function copySummary(){
+  const text = "I let AI roast my LinkedIn profile today. Here's what changed:\n\nBefore: 16/100\nAfter: 84/100\n\nTop 3 mistakes I was making:\n1. Blank headline — invisible in recruiter search\n2. Blank About section — zero proof of what I actually build\n3. Experience with no bullets — a title with nothing behind it\n\nThe #1 thing that made the biggest difference: Actually writing down the real projects I'd already built instead of leaving the profile blank.";
+  navigator.clipboard.writeText(text);
+  event.target.textContent = "Copied ✓";
+  setTimeout(()=>{event.target.textContent="Copy summary to post on LinkedIn";}, 2000);
+}
+</script>
+</body>
+</html>
