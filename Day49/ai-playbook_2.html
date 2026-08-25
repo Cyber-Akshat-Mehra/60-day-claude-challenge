@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your AI Playbook — for Engineers</title>
+<style>
+:root{
+  --bg:#0B0F14; --panel:#121820; --panel-2:#171F29; --border:#232D3A;
+  --text:#E7ECF3; --text-dim:#93A1B5; --text-faint:#5C6A7E;
+  --accent:#4C8DFF; --accent-dim:#2E4E85; --accent-glow:rgba(76,141,255,.18);
+  --amber:#F5A623; --amber-dim:#8A611A; --amber-glow:rgba(245,166,35,.15);
+  --green:#3DDC97; --red:#FF6B6B;
+  --mono:'JetBrains Mono','SF Mono',Consolas,monospace;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --radius:10px; --radius-sm:6px;
+  --shadow: 0 8px 30px rgba(0,0,0,.35);
+}
+[data-theme="light"]{
+  --bg:#F5F6F8; --panel:#FFFFFF; --panel-2:#F0F2F5;
+  --border:#DDE2E9; --text:#1A2332; --text-dim:#5C6A7E; --text-faint:#93A1B5;
+  --accent:#2E5FCC; --accent-dim:#DCE6FB; --accent-glow:rgba(46,95,204,.1);
+  --amber:#B87415; --amber-dim:#F5E3C4; --amber-glow:rgba(184,116,21,.12);
+  --shadow: 0 8px 24px rgba(20,30,50,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg); color:var(--text); font-family:var(--sans);
+  min-height:100vh; overflow-x:hidden;
+  transition:background .25s ease,color .25s ease;
+}
+::selection{background:var(--accent-glow);color:var(--text);}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:8px;}
+::-webkit-scrollbar-thumb:hover{background:var(--text-faint);}
+
+a{color:inherit;}
+button{font-family:inherit;cursor:pointer;}
+input,select,textarea{font-family:inherit;}
+code,.mono{font-family:var(--mono);}
+
+/* ---------- Layout shell ---------- */
+.app{display:flex;min-height:100vh;}
+
+/* Sidebar */
+.sidebar{
+  width:240px; flex:0 0 240px; background:var(--panel);
+  border-right:1px solid var(--border); padding:18px 14px;
+  display:flex; flex-direction:column; gap:4px;
+  position:sticky; top:0; height:100vh; overflow-y:auto;
+  z-index:40;
+}
+.brand{
+  display:flex; align-items:center; gap:10px; padding:6px 8px 18px 8px;
+  border-bottom:1px solid var(--border); margin-bottom:14px;
+}
+.brand-mark{
+  width:30px;height:30px;border-radius:8px;
+  background:linear-gradient(135deg,var(--accent),var(--amber));
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-weight:700;font-size:13px;color:#0B0F14;
+  flex:0 0 30px;
+}
+.brand-text{display:flex;flex-direction:column;line-height:1.2;}
+.brand-text b{font-size:14px;letter-spacing:.2px;}
+.brand-text span{font-size:11px;color:var(--text-faint);font-family:var(--mono);}
+
+.nav-item{
+  display:flex; align-items:center; gap:10px; padding:9px 10px;
+  border-radius:var(--radius-sm); color:var(--text-dim); font-size:13.5px;
+  font-weight:500; border:1px solid transparent; text-decoration:none;
+  background:none; width:100%; text-align:left;
+  transition:background .15s ease, color .15s ease;
+}
+.nav-item svg{flex:0 0 17px;width:17px;height:17px;opacity:.85;}
+.nav-item:hover{background:var(--panel-2); color:var(--text);}
+.nav-item.active{background:var(--accent-glow); color:var(--accent); border-color:var(--accent-dim);}
+.nav-section-label{
+  font-size:10.5px; text-transform:uppercase; letter-spacing:.09em;
+  color:var(--text-faint); padding:16px 10px 6px; font-weight:600;
+}
+.sidebar-foot{margin-top:auto;padding-top:12px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:6px;}
+
+/* Main */
+.main{flex:1; min-width:0; display:flex; flex-direction:column;}
+.topbar{
+  height:60px; border-bottom:1px solid var(--border); background:var(--bg);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 22px; position:sticky; top:0; z-index:30; backdrop-filter:blur(6px);
+}
+.topbar-left{display:flex;align-items:center;gap:12px;}
+.topbar-title{font-size:15px;font-weight:600;}
+.topbar-sub{font-size:12px;color:var(--text-faint);}
+.topbar-right{display:flex;align-items:center;gap:8px;}
+
+.icon-btn{
+  width:34px;height:34px;border-radius:8px;background:var(--panel);
+  border:1px solid var(--border); display:flex;align-items:center;justify-content:center;
+  color:var(--text-dim); transition:all .15s ease;
+}
+.icon-btn:hover{color:var(--text); border-color:var(--text-faint); background:var(--panel-2);}
+.icon-btn svg{width:16px;height:16px;}
+
+.btn{
+  display:inline-flex; align-items:center; gap:7px; padding:9px 14px;
+  border-radius:8px; font-size:13px; font-weight:600; border:1px solid var(--border);
+  background:var(--panel); color:var(--text); transition:all .15s ease; white-space:nowrap;
+}
+.btn:hover{border-color:var(--text-faint); background:var(--panel-2);}
+.btn-primary{background:var(--accent); color:#fff; border-color:var(--accent);}
+.btn-primary:hover{background:#3d7ae8; border-color:#3d7ae8;}
+.btn-sm{padding:6px 10px;font-size:12px;}
+.btn-ghost{background:transparent;border-color:transparent;}
+.btn-ghost:hover{background:var(--panel-2);}
+.btn svg{width:14px;height:14px;}
+
+.content{flex:1; padding:26px 30px 70px; max-width:1180px; width:100%; margin:0 auto;}
+.view{display:none; animation:fadein .35s ease;}
+.view.active{display:block;}
+@keyframes fadein{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+.page-head{margin-bottom:22px;}
+.page-head h1{font-size:23px; font-weight:700; letter-spacing:-.01em; margin-bottom:4px;}
+.page-head p{font-size:13.5px; color:var(--text-dim); max-width:640px; line-height:1.5;}
+
+/* ---------- Explainer banner ---------- */
+.explainer{
+  background:linear-gradient(135deg, var(--accent-glow), transparent 60%), var(--panel);
+  border:1px solid var(--accent-dim); border-radius:var(--radius);
+  padding:16px 18px; margin-bottom:22px; display:flex; gap:14px; align-items:flex-start;
+  position:relative;
+}
+.explainer-icon{
+  width:32px;height:32px;border-radius:8px;background:var(--accent-glow);
+  display:flex;align-items:center;justify-content:center;flex:0 0 32px;color:var(--accent);
+}
+.explainer-icon svg{width:17px;height:17px;}
+.explainer-body h3{font-size:13.5px;font-weight:700;margin-bottom:4px;}
+.explainer-body p{font-size:12.8px;color:var(--text-dim);line-height:1.55;}
+.explainer-body p b{color:var(--text);font-weight:600;}
+.explainer-close{
+  position:absolute; top:10px; right:10px; width:24px;height:24px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;color:var(--text-faint);
+  background:transparent; border:none;
+}
+.explainer-close:hover{background:var(--panel-2); color:var(--text);}
+
+/* ---------- Cards / grids ---------- */
+.grid{display:grid; gap:14px;}
+.grid-2{grid-template-columns:repeat(2,1fr);}
+.grid-3{grid-template-columns:repeat(3,1fr);}
+.grid-4{grid-template-columns:repeat(4,1fr);}
+@media(max-width:900px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr;}}
+
+.stat-card{
+  background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+  padding:16px 18px;
+}
+.stat-card .num{font-family:var(--mono); font-size:26px; font-weight:700; color:var(--accent);}
+.stat-card .lbl{font-size:12px; color:var(--text-dim); margin-top:3px;}
+
+.card{
+  background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+  padding:18px; transition:border-color .15s ease, transform .15s ease;
+}
+.card:hover{border-color:var(--text-faint);}
+
+.category-block{margin-bottom:30px;}
+.category-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;}
+.category-head h2{font-size:15px;font-weight:700; display:flex; align-items:center; gap:8px;}
+.category-head .count{font-family:var(--mono); font-size:11px; color:var(--text-faint); font-weight:500;}
+.category-desc{font-size:12.5px; color:var(--text-dim); margin-bottom:12px; max-width:600px;}
+
+.workflow-card{
+  background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+  padding:16px 17px; display:flex; flex-direction:column; gap:10px; position:relative;
+  transition:border-color .15s ease;
+}
+.workflow-card:hover{border-color:var(--accent-dim);}
+.wf-top{display:flex; align-items:flex-start; justify-content:space-between; gap:8px;}
+.wf-title{font-size:14px; font-weight:700; line-height:1.3;}
+.wf-fav{background:none;border:none;color:var(--text-faint);width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex:0 0 26px;}
+.wf-fav:hover{background:var(--panel-2);}
+.wf-fav.active{color:var(--amber);}
+.wf-fav svg{width:15px;height:15px;}
+.wf-desc{font-size:12.3px; color:var(--text-dim); line-height:1.5;}
+.wf-tags{display:flex; gap:6px; flex-wrap:wrap;}
+.tag{
+  font-size:10.5px; font-family:var(--mono); padding:3px 8px; border-radius:100px;
+  background:var(--panel-2); color:var(--text-dim); border:1px solid var(--border);
+}
+.wf-actions{display:flex; gap:6px; margin-top:2px;}
+
+/* ---------- Modal ---------- */
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(4,7,10,.6); backdrop-filter:blur(3px);
+  display:none; align-items:center; justify-content:center; z-index:100; padding:20px;
+}
+.modal-overlay.open{display:flex; animation:fadein .2s ease;}
+.modal{
+  background:var(--panel); border:1px solid var(--border); border-radius:14px;
+  width:100%; max-width:720px; max-height:88vh; display:flex; flex-direction:column;
+  box-shadow:var(--shadow); overflow:hidden;
+}
+.modal.modal-lg{max-width:900px;}
+.modal-head{
+  padding:18px 22px; border-bottom:1px solid var(--border); display:flex;
+  align-items:center; justify-content:space-between; gap:10px;
+}
+.modal-head h2{font-size:16px; font-weight:700;}
+.modal-head p{font-size:12px;color:var(--text-faint);margin-top:2px;}
+.modal-close{background:none;border:none;color:var(--text-faint);width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex:0 0 30px;}
+.modal-close:hover{background:var(--panel-2); color:var(--text);}
+.modal-body{padding:20px 22px; overflow-y:auto; flex:1;}
+.modal-foot{padding:14px 22px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:8px;}
+
+.field{margin-bottom:16px;}
+.field label{display:block; font-size:12.5px; font-weight:600; margin-bottom:6px; color:var(--text);}
+.field .hint{font-size:11.5px; color:var(--text-faint); margin-top:5px; line-height:1.4;}
+.input, .textarea, select.input{
+  width:100%; background:var(--panel-2); border:1px solid var(--border); border-radius:8px;
+  padding:10px 12px; font-size:13px; color:var(--text); outline:none; transition:border-color .15s ease;
+}
+.input:focus, .textarea:focus{border-color:var(--accent);}
+.textarea{resize:vertical; min-height:90px; line-height:1.5; font-family:var(--mono); font-size:12.5px;}
+select.input{appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2393A1B5'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:30px;}
+
+/* ---------- Prompt Builder ---------- */
+.pb-layout{display:grid; grid-template-columns:300px 1fr; gap:18px;}
+@media(max-width:1000px){.pb-layout{grid-template-columns:1fr;}}
+.pb-blocks{display:flex; flex-direction:column; gap:8px;}
+.block-option{
+  background:var(--panel); border:1px solid var(--border); border-radius:var(--radius-sm);
+  padding:11px 12px; cursor:pointer; transition:all .15s ease;
+}
+.block-option:hover{border-color:var(--accent-dim); background:var(--accent-glow);}
+.block-option.added{opacity:.4; pointer-events:none;}
+.block-option-top{display:flex; align-items:center; justify-content:space-between; gap:6px;}
+.block-option-top b{font-size:12.8px;}
+.block-option-top svg{width:14px;height:14px;color:var(--accent);flex:0 0 14px;}
+.block-option p{font-size:11px; color:var(--text-faint); margin-top:4px; line-height:1.45;}
+
+.pb-canvas{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:18px; min-height:400px;}
+.pb-canvas-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.pb-canvas-head h3{font-size:13.5px;font-weight:700;}
+.pb-empty{
+  border:1.5px dashed var(--border); border-radius:var(--radius-sm); padding:34px 20px;
+  text-align:center; color:var(--text-faint); font-size:12.8px; line-height:1.6;
+}
+.assembled-block{
+  border:1px solid var(--border); border-radius:var(--radius-sm); margin-bottom:10px; overflow:hidden;
+  background:var(--panel-2);
+}
+.assembled-block-head{
+  display:flex; align-items:center; justify-content:space-between; padding:9px 12px;
+  background:var(--panel); border-bottom:1px solid var(--border); gap:8px;
+}
+.ab-title-wrap{display:flex; align-items:center; gap:8px; min-width:0;}
+.ab-badge{
+  width:20px;height:20px;border-radius:5px;background:var(--accent-glow);color:var(--accent);
+  display:flex;align-items:center;justify-content:center;flex:0 0 20px;font-size:10px;font-weight:700;font-family:var(--mono);
+}
+.ab-title-txt b{font-size:12.5px; display:block;}
+.ab-title-txt span{font-size:10.5px; color:var(--text-faint); display:block; line-height:1.3;}
+.ab-controls{display:flex; gap:4px;}
+.ab-icon-btn{width:24px;height:24px;border-radius:5px;background:none;border:none;color:var(--text-faint); display:flex; align-items:center; justify-content:center;}
+.ab-icon-btn:hover{background:var(--panel); color:var(--text);}
+.ab-icon-btn svg{width:13px;height:13px;}
+.assembled-block-body{padding:11px 12px;}
+.assembled-block-body select, .assembled-block-body textarea{margin-bottom:6px;}
+.assembled-block-body textarea{min-height:56px; font-size:12px;}
+
+.pb-preview{
+  margin-top:18px; background:var(--panel-2); border:1px solid var(--border); border-radius:var(--radius-sm);
+  padding:14px 16px;
+}
+.pb-preview-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+.pb-preview-head b{font-size:12.5px;}
+.pb-preview pre{
+  white-space:pre-wrap; word-break:break-word; font-family:var(--mono); font-size:12px; line-height:1.7;
+  color:var(--text-dim); max-height:340px; overflow-y:auto;
+}
+.pb-preview pre .ph-label{color:var(--accent); font-weight:700;}
+
+/* ---------- Loop builder ---------- */
+.loop-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+@media(max-width:900px){.loop-grid{grid-template-columns:1fr;}}
+.loop-section{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px;}
+.loop-section-head{display:flex; align-items:center; gap:8px; margin-bottom:4px;}
+.loop-section-head .num{
+  width:20px;height:20px;border-radius:5px;background:var(--amber-glow);color:var(--amber);
+  font-size:11px;font-family:var(--mono);font-weight:700;display:flex;align-items:center;justify-content:center;flex:0 0 20px;
+}
+.loop-section-head b{font-size:13px;}
+.loop-section-desc{font-size:11.5px;color:var(--text-faint); margin-bottom:10px; line-height:1.5;}
+
+.chip-row{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:6px;}
+.chip{
+  font-size:11px; padding:6px 10px; border-radius:100px; border:1px solid var(--border);
+  background:var(--panel-2); color:var(--text-dim); transition:all .12s ease;
+}
+.chip:hover{border-color:var(--text-faint);}
+.chip.selected{background:var(--amber-glow); color:var(--amber); border-color:var(--amber-dim);}
+
+/* ---------- Search/filter bar ---------- */
+.toolbar{display:flex; gap:10px; align-items:center; margin-bottom:20px; flex-wrap:wrap;}
+.search-wrap{position:relative; flex:1; min-width:200px;}
+.search-wrap svg{position:absolute; left:11px; top:50%; transform:translateY(-50%); width:14px;height:14px; color:var(--text-faint);}
+.search-wrap input{padding-left:32px;}
+.filter-pills{display:flex; gap:6px; flex-wrap:wrap;}
+.filter-pill{
+  font-size:12px; padding:8px 13px; border-radius:8px; border:1px solid var(--border);
+  background:var(--panel); color:var(--text-dim);
+}
+.filter-pill.active{background:var(--accent-glow); color:var(--accent); border-color:var(--accent-dim);}
+
+/* ---------- Toast ---------- */
+.toast{
+  position:fixed; bottom:22px; left:50%; transform:translateX(-50%) translateY(20px);
+  background:var(--panel); border:1px solid var(--border); color:var(--text);
+  padding:11px 18px; border-radius:9px; font-size:12.8px; font-weight:500;
+  box-shadow:var(--shadow); z-index:200; display:flex; align-items:center; gap:8px;
+  opacity:0; pointer-events:none; transition:all .25s ease;
+}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+.toast svg{width:15px;height:15px; color:var(--green); flex:0 0 15px;}
+
+/* ---------- Empty state ---------- */
+.empty-state{
+  text-align:center; padding:60px 20px; color:var(--text-faint);
+  border:1.5px dashed var(--border); border-radius:var(--radius);
+}
+.empty-state svg{width:34px;height:34px; margin-bottom:12px; opacity:.5;}
+.empty-state h3{font-size:14px; color:var(--text-dim); margin-bottom:5px;}
+.empty-state p{font-size:12.5px; max-width:340px; margin:0 auto;}
+
+/* ---------- Help modal ---------- */
+.help-section{margin-bottom:18px;}
+.help-section h4{font-size:13px; font-weight:700; margin-bottom:6px; display:flex; align-items:center; gap:7px;}
+.help-section h4 svg{width:14px;height:14px; color:var(--accent);}
+.help-section p, .help-section li{font-size:12.5px; color:var(--text-dim); line-height:1.6;}
+.help-section ul{padding-left:18px; margin-top:4px;}
+.kbd{
+  font-family:var(--mono); font-size:11px; background:var(--panel-2); border:1px solid var(--border);
+  padding:2px 6px; border-radius:4px; color:var(--text);
+}
+
+/* ---------- Onboarding ---------- */
+.onb-overlay{position:fixed; inset:0; background:rgba(4,7,10,.72); z-index:150; display:flex; align-items:center; justify-content:center; padding:20px;}
+.onb-card{
+  background:var(--panel); border:1px solid var(--border); border-radius:16px; max-width:480px; width:100%;
+  padding:32px; box-shadow:var(--shadow); text-align:left;
+}
+.onb-icon{width:44px;height:44px;border-radius:12px; background:linear-gradient(135deg,var(--accent),var(--amber)); display:flex;align-items:center;justify-content:center; margin-bottom:18px;}
+.onb-icon svg{width:22px;height:22px;color:#0B0F14;}
+.onb-card h2{font-size:19px; margin-bottom:8px;}
+.onb-card p{font-size:13.5px; color:var(--text-dim); line-height:1.6; margin-bottom:16px;}
+.onb-steps{display:flex; flex-direction:column; gap:10px; margin-bottom:22px;}
+.onb-step{display:flex; gap:10px; align-items:flex-start; font-size:12.8px; color:var(--text-dim);}
+.onb-step b{color:var(--text);}
+.onb-step .n{width:20px;height:20px;border-radius:6px;background:var(--panel-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10.5px;flex:0 0 20px;}
+
+/* ---------- Footer nav mobile ---------- */
+.mobile-nav-toggle{display:none;}
+@media(max-width:820px){
+  .sidebar{position:fixed; left:-260px; top:0; height:100vh; transition:left .2s ease; box-shadow:var(--shadow);}
+  .sidebar.open{left:0;}
+  .mobile-nav-toggle{display:flex;}
+  .content{padding:20px 16px 70px;}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr;}
+}
+
+.small-note{font-size:11.5px; color:var(--text-faint); margin-top:8px; line-height:1.5;}
+hr.div{border:none; border-top:1px solid var(--border); margin:20px 0;}
+
+.var-pills{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;}
+.var-pill{font-family:var(--mono); font-size:11px; padding:4px 9px; border-radius:6px; background:var(--accent-glow); color:var(--accent); cursor:pointer; border:1px solid var(--accent-dim);}
+.var-pill:hover{background:var(--accent);color:#fff;}
+
+.copy-flash{animation:flash .5s ease;}
+@keyframes flash{0%{background:var(--green);}100%{background:inherit;}}
+</style>
+</head>
+<body>
+
+<!-- ================= ONBOARDING ================= -->
+<div class="onb-overlay" id="onbOverlay">
+  <div class="onb-card">
+    <div class="onb-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2 3 7l9 5 9-5-9-5Z"/><path d="M3 12l9 5 9-5"/><path d="M3 17l9 5 9-5"/></svg>
+    </div>
+    <h2>Your Personal AI Playbook</h2>
+    <p>This is a toolkit for getting <b style="color:var(--text)">consistent, high-quality output</b> from AI, built around how you actually work as a software engineer — code review, debugging, and learning new tech.</p>
+    <div class="onb-steps">
+      <div class="onb-step"><span class="n">1</span><div><b>Workflows</b> — ready-to-use, editable templates for your recurring tasks (code review, debugging, refactors, learning). Fill in the blanks, copy, paste into Claude/ChatGPT/Copilot.</div></div>
+      <div class="onb-step"><span class="n">2</span><div><b>Prompt Builder</b> — snap together building blocks (role, objective, constraints, output format...) to construct a precise prompt from scratch, with a live preview.</div></div>
+      <div class="onb-step"><span class="n">3</span><div><b>Loop Builder</b> — turn any one-shot prompt into a self-checking, iterating prompt with goals, evaluation criteria, and stop conditions — so the AI keeps working until it's actually right.</div></div>
+    </div>
+    <button class="btn btn-primary" style="width:100%; justify-content:center;" onclick="closeOnboarding()">Get started</button>
+    <p class="small-note" style="text-align:center; margin-top:10px;">You can reopen this anytime from the <b>?</b> button in the top bar.</p>
+  </div>
+</div>
+
+<div class="app">
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">AI</div>
+      <div class="brand-text"><b>AI Playbook</b><span>v1.0 · engineer edition</span></div>
+    </div>
+
+    <div class="nav-section-label">Overview</div>
+    <button class="nav-item active" data-view="dashboard" onclick="showView('dashboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+      Dashboard
+    </button>
+
+    <div class="nav-section-label">Build</div>
+    <button class="nav-item" data-view="workflows" onclick="showView('workflows')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      My Workflows
+    </button>
+    <button class="nav-item" data-view="promptbuilder" onclick="showView('promptbuilder')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="11" width="8" height="10" rx="1.5"/><rect x="3" y="14" width="8" height="7" rx="1.5"/></svg>
+      Prompt Builder
+    </button>
+    <button class="nav-item" data-view="loopbuilder" onclick="showView('loopbuilder')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 2.1l4 4-4 4"/><path d="M3 12.7V9.9A4 4 0 0 1 7 5.9h14"/><path d="M7 21.9l-4-4 4-4"/><path d="M21 11.3v2.8A4 4 0 0 1 17 18h-14"/></svg>
+      Loop Builder
+    </button>
+
+    <div class="nav-section-label">Library</div>
+    <button class="nav-item" data-view="blocks" onclick="showView('blocks')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2"/><path d="M3 8h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8z"/><path d="M3 13h18"/></svg>
+      Building Blocks
+    </button>
+    <button class="nav-item" data-view="favorites" onclick="showView('favorites')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 17.3-6.2 3.6 1.6-7-5.4-4.7 7.1-.6L12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7z"/></svg>
+      Favorites
+    </button>
+
+    <div class="sidebar-foot">
+      <button class="nav-item" onclick="openHelp()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2-3 4"/><path d="M12 17.5v.01"/></svg>
+        What is this?
+      </button>
+      <button class="nav-item" onclick="exportData()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13"/><path d="m6 10 6 6 6-6"/><path d="M4 20h16"/></svg>
+        Export data
+      </button>
+      <button class="nav-item" onclick="document.getElementById('importFile').click()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V3"/><path d="m6 9 6-6 6 6"/><path d="M4 20h16"/></svg>
+        Import data
+      </button>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+    </div>
+  </aside>
+
+  <!-- ================= MAIN ================= -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="icon-btn mobile-nav-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <div>
+          <div class="topbar-title" id="topbarTitle">Dashboard</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn" title="Keyboard shortcuts (?)" onclick="openHelp()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2-3 4"/><path d="M12 17.5v.01"/></svg>
+        </button>
+        <button class="icon-btn" title="Toggle dark/light" onclick="toggleTheme()">
+          <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>
+        </button>
+        <button class="btn btn-primary btn-sm" onclick="openWorkflowEditor()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
+          New workflow
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ========== DASHBOARD ========== -->
+      <div class="view active" id="view-dashboard">
+        <div class="page-head">
+          <h1>Dashboard</h1>
+          <p>A quick overview of your saved workflows and where to go next. Everything here is generated from what you actually use, not a generic template.</p>
+        </div>
+
+        <div class="explainer" id="explainerBanner">
+          <button class="explainer-close" onclick="dismissExplainer()">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+          <div class="explainer-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2-3 4"/><path d="M12 17.5v.01"/></svg>
+          </div>
+          <div class="explainer-body">
+            <h3>What this tool is for</h3>
+            <p>This is your personal system for getting <b>consistent output quality</b> from AI instead of re-explaining context every time. <b>My Workflows</b> holds ready-made, editable prompt templates for your recurring engineering tasks. <b>Prompt Builder</b> lets you assemble a precise one-off prompt from labeled building blocks. <b>Loop Builder</b> turns any prompt into one that keeps improving itself against criteria you set, instead of stopping after one pass.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-4" style="margin-bottom:26px;">
+          <div class="stat-card"><div class="num" id="statWorkflows">0</div><div class="lbl">Saved workflows</div></div>
+          <div class="stat-card"><div class="num" id="statFavorites">0</div><div class="lbl">Favorited</div></div>
+          <div class="stat-card"><div class="num" id="statCategories">0</div><div class="lbl">Categories in use</div></div>
+          <div class="stat-card"><div class="num">2</div><div class="lbl">Builders available</div></div>
+        </div>
+
+        <div class="category-head"><h2>Jump back in</h2></div>
+        <div class="grid grid-3" style="margin-bottom:28px;">
+          <div class="card" style="cursor:pointer" onclick="showView('workflows')">
+            <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--accent);margin-bottom:10px;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <b style="font-size:13.5px;">Browse workflows</b>
+            <p style="font-size:12.3px;color:var(--text-dim);margin-top:5px;line-height:1.5;">Editable templates for code review, debugging, and learning — organized by category.</p>
+          </div>
+          <div class="card" style="cursor:pointer" onclick="showView('promptbuilder')">
+            <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--accent);margin-bottom:10px;"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="11" width="8" height="10" rx="1.5"/><rect x="3" y="14" width="8" height="7" rx="1.5"/></svg>
+            <b style="font-size:13.5px;">Build a custom prompt</b>
+            <p style="font-size:12.3px;color:var(--text-dim);margin-top:5px;line-height:1.5;">Snap together role, context, constraints, and output format with a live preview.</p>
+          </div>
+          <div class="card" style="cursor:pointer" onclick="showView('loopbuilder')">
+            <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--amber);margin-bottom:10px;"><path d="M17 2.1l4 4-4 4"/><path d="M3 12.7V9.9A4 4 0 0 1 7 5.9h14"/><path d="M7 21.9l-4-4 4-4"/><path d="M21 11.3v2.8A4 4 0 0 1 17 18h-14"/></svg>
+            <b style="font-size:13.5px;">Turn a prompt into a loop</b>
+            <p style="font-size:12.3px;color:var(--text-dim);margin-top:5px;line-height:1.5;">Add goals and stop conditions so the AI self-checks instead of stopping after one draft.</p>
+          </div>
+        </div>
+
+        <div class="category-head"><h2>Why output quality varies (and how this fixes it)</h2></div>
+        <div class="card">
+          <p style="font-size:12.8px; color:var(--text-dim); line-height:1.7;">
+          Inconsistent AI output is almost always a <b style="color:var(--text)">missing-ingredient</b> problem: the model wasn't given a fixed role, clear constraints, or a defined output format, so it improvises differently each time. The fix isn't a better one-off prompt — it's a <b style="color:var(--text)">repeatable structure</b> you reuse every time you ask for that kind of thing. That's what the workflows and builders below are: fill-in-the-blank structures, not one-time prompts.
+          </p>
+        </div>
+      </div>
+
+      <!-- ========== WORKFLOWS ========== -->
+      <div class="view" id="view-workflows">
+        <div class="page-head">
+          <h1>My Workflows</h1>
+          <p>Your saved AI prompt templates, organized by task. Each one is editable — fill in the variables, copy, and paste into Claude, ChatGPT, or Copilot Chat.</p>
+        </div>
+
+        <div class="toolbar">
+          <div class="search-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <input class="input" id="searchInput" placeholder="Search workflows by name, tag, or content..." oninput="renderWorkflows()">
+          </div>
+          <div class="filter-pills" id="categoryFilters"></div>
+        </div>
+
+        <div id="workflowsContainer"></div>
+      </div>
+
+      <!-- ========== FAVORITES ========== -->
+      <div class="view" id="view-favorites">
+        <div class="page-head">
+          <h1>Favorites</h1>
+          <p>Workflows you've starred for quick access — your most-used AI systems, in one place.</p>
+        </div>
+        <div id="favoritesContainer"></div>
+      </div>
+
+      <!-- ========== PROMPT BUILDER ========== -->
+      <div class="view" id="view-promptbuilder">
+        <div class="page-head">
+          <h1>Prompt Builder</h1>
+          <p>Assemble a prompt from labeled building blocks. Each block controls one part of how the AI responds — add the ones you need, fill them in, and watch the final prompt take shape on the right.</p>
+        </div>
+
+        <div class="pb-layout">
+          <div>
+            <div class="category-head" style="margin-bottom:8px;"><h2>Available blocks</h2></div>
+            <p class="small-note" style="margin-bottom:12px;">Click a block to add it to your prompt. Order matters — later you can reorder or remove blocks on the right.</p>
+            <div class="pb-blocks" id="pbBlockList"></div>
+          </div>
+
+          <div>
+            <div class="pb-canvas">
+              <div class="pb-canvas-head">
+                <h3>Your prompt</h3>
+                <button class="btn btn-ghost btn-sm" onclick="clearPromptBuilder()">Clear all</button>
+              </div>
+              <div id="pbCanvasBody"></div>
+            </div>
+
+            <div class="pb-preview">
+              <div class="pb-preview-head">
+                <b>Live preview</b>
+                <div style="display:flex; gap:6px;">
+                  <button class="btn btn-sm" onclick="copyPBPreview()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    Copy
+                  </button>
+                  <button class="btn btn-primary btn-sm" onclick="savePBAsWorkflow()">Save as workflow</button>
+                </div>
+              </div>
+              <pre id="pbPreviewText">Add blocks on the left to see your prompt build up here.</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== LOOP BUILDER ========== -->
+      <div class="view" id="view-loopbuilder">
+        <div class="page-head">
+          <h1>Loop Builder</h1>
+          <p><b style="color:var(--text)">A "loop prompt"</b> is a prompt that tells the AI to check its own work against criteria and keep revising until it meets them or hits a stop condition — instead of giving you its first draft as the final answer. Paste any normal prompt below, define what "done" looks like, and get back a self-correcting version.</p>
+        </div>
+
+        <div class="field">
+          <label>Base prompt <span style="font-weight:400;color:var(--text-faint);">— the normal, single-shot prompt you want to convert</span></label>
+          <textarea class="textarea" id="loopBasePrompt" placeholder="e.g. Refactor this function to reduce complexity and improve readability, matching our existing code style.">Review this pull request diff for correctness, edge cases, and adherence to our code style guide. Point out any bugs, security issues, or maintainability concerns.</textarea>
+        </div>
+
+        <div class="loop-grid">
+          <div class="loop-section">
+            <div class="loop-section-head"><span class="num">1</span><b>Goal</b></div>
+            <p class="loop-section-desc">What does success look like at the end of the loop? This anchors every revision so the AI doesn't drift.</p>
+            <textarea class="textarea" id="loopGoal" style="min-height:60px;">A review that a senior engineer would sign off on with zero follow-up questions.</textarea>
+          </div>
+
+          <div class="loop-section">
+            <div class="loop-section-head"><span class="num">2</span><b>Evaluation criteria</b></div>
+            <p class="loop-section-desc">The checklist the AI grades its own draft against before showing it to you. Pick as many as apply.</p>
+            <div class="chip-row" id="loopCriteriaChips"></div>
+          </div>
+
+          <div class="loop-section">
+            <div class="loop-section-head"><span class="num">3</span><b>Improvement strategy</b></div>
+            <p class="loop-section-desc">How the AI should revise between iterations when it finds a gap.</p>
+            <select class="input" id="loopStrategy">
+              <option value="targeted">Targeted fixes — patch only the specific issue found, leave the rest untouched</option>
+              <option value="rewrite">Full rewrite — redo the whole response each pass, informed by prior gaps</option>
+              <option value="ranked">Ranked-priority — fix the single highest-impact issue first, then re-evaluate</option>
+              <option value="devils-advocate">Devil's advocate — argue against its own draft before revising it</option>
+            </select>
+          </div>
+
+          <div class="loop-section">
+            <div class="loop-section-head"><span class="num">4</span><b>Stop conditions</b></div>
+            <p class="loop-section-desc">When the loop should end. Without this, loops can run forever or quietly degrade — always set at least one.</p>
+            <div class="chip-row" id="loopStopChips"></div>
+            <div class="field" style="margin-top:8px; margin-bottom:0;">
+              <label style="font-size:11.5px;">Max iterations</label>
+              <input class="input" type="number" id="loopMaxIter" value="3" min="1" max="10">
+            </div>
+          </div>
+
+          <div class="loop-section" style="grid-column:1/-1;">
+            <div class="loop-section-head"><span class="num">5</span><b>Safety rules</b></div>
+            <p class="loop-section-desc">Guardrails so autonomous iteration doesn't do something you didn't ask for, like changing scope or fabricating results.</p>
+            <div class="chip-row" id="loopSafetyChips"></div>
+          </div>
+        </div>
+
+        <div class="pb-preview" style="margin-top:20px;">
+          <div class="pb-preview-head">
+            <b>Generated loop prompt</b>
+            <div style="display:flex; gap:6px;">
+              <button class="btn btn-sm" onclick="copyLoopPreview()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                Copy
+              </button>
+              <button class="btn btn-primary btn-sm" onclick="saveLoopAsWorkflow()">Save as workflow</button>
+            </div>
+          </div>
+          <pre id="loopPreviewText"></pre>
+        </div>
+      </div>
+
+      <!-- ========== BLOCKS LIBRARY ========== -->
+      <div class="view" id="view-blocks">
+        <div class="page-head">
+          <h1>Building Blocks</h1>
+          <p>The modular pieces used by the Prompt Builder and Loop Builder. Understanding what each one does is what lets you combine them into new prompts on your own, instead of relying only on saved templates.</p>
+        </div>
+        <div class="grid grid-2" id="blocksLibraryContainer"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ================= HELP MODAL ================= -->
+<div class="modal-overlay" id="helpModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div><h2>What is this?</h2><p>A quick orientation to every part of the playbook</p></div>
+      <button class="modal-close" onclick="closeModal('helpModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="help-section">
+        <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Dashboard</h4>
+        <p>An overview of what you've saved and quick links into the three main tools. Not required reading — just a starting point.</p>
+      </div>
+      <div class="help-section">
+        <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>My Workflows</h4>
+        <p>Editable, reusable prompt templates for your recurring tasks (code review, debugging, refactors, learning new tech). Each has variables in brackets like <span class="kbd">[LANGUAGE]</span> you fill in before copying.</p>
+      </div>
+      <div class="help-section">
+        <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="11" width="8" height="10" rx="1.5"/><rect x="3" y="14" width="8" height="7" rx="1.5"/></svg>Prompt Builder</h4>
+        <p>Build a prompt from scratch by adding structural pieces — role, objective, context, constraints, reasoning strategy, output format, tone, examples, quality checks. Each block explains what it does and why it changes the output. A live preview assembles them into one final prompt as you go.</p>
+      </div>
+      <div class="help-section">
+        <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 2.1l4 4-4 4"/><path d="M3 12.7V9.9A4 4 0 0 1 7 5.9h14"/><path d="M7 21.9l-4-4 4-4"/><path d="M21 11.3v2.8A4 4 0 0 1 17 18h-14"/></svg>Loop Builder</h4>
+        <p>Turns a normal, single-answer prompt into a self-checking one. You define a goal, a checklist the AI grades itself against, how it should revise between attempts, and when it must stop. This is useful for tasks where "good enough on the first try" isn't reliable, like a thorough code review.</p>
+      </div>
+      <div class="help-section">
+        <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2"/><path d="M3 8h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8z"/><path d="M3 13h18"/></svg>Building Blocks</h4>
+        <p>A reference library explaining every block used across both builders, so you understand the "why," not just the "what."</p>
+      </div>
+      <div class="help-section">
+        <h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/></svg>Keyboard shortcuts</h4>
+        <ul>
+          <li><span class="kbd">/</span> — focus search (on Workflows page)</li>
+          <li><span class="kbd">N</span> — new workflow</li>
+          <li><span class="kbd">?</span> — open this help panel</li>
+          <li><span class="kbd">Esc</span> — close any open modal</li>
+        </ul>
+      </div>
+      <div class="help-section">
+        <h4>Data & privacy</h4>
+        <p>Everything is stored locally in your browser (localStorage) — nothing is sent anywhere. Use <b style="color:var(--text)">Export data</b> in the sidebar to back up or move your workflows to another device, and <b style="color:var(--text)">Import data</b> to restore them.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= WORKFLOW VIEW/EDIT MODAL ================= -->
+<div class="modal-overlay" id="workflowModal">
+  <div class="modal modal-lg">
+    <div class="modal-head">
+      <div><h2 id="wfModalTitle">Workflow</h2><p id="wfModalSub">Fill in the variables, then copy</p></div>
+      <button class="modal-close" onclick="closeModal('workflowModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" id="wfModalBody"></div>
+    <div class="modal-foot" id="wfModalFoot"></div>
+  </div>
+</div>
+
+<!-- ================= WORKFLOW EDITOR (create/edit) ================= -->
+<div class="modal-overlay" id="editorModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div><h2 id="editorTitle">New workflow</h2><p>Create a reusable prompt template</p></div>
+      <button class="modal-close" onclick="closeModal('editorModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editorId">
+      <div class="field">
+        <label>Name</label>
+        <input class="input" id="editorName" placeholder="e.g. Pull Request Deep Review">
+      </div>
+      <div class="field">
+        <label>Category</label>
+        <select class="input" id="editorCategory"></select>
+      </div>
+      <div class="field">
+        <label>Short description</label>
+        <input class="input" id="editorDesc" placeholder="One line explaining when to use this">
+      </div>
+      <div class="field">
+        <label>Template</label>
+        <textarea class="textarea" id="editorTemplate" style="min-height:180px;" placeholder="Write your prompt. Use [VARIABLE_NAME] for fill-in-the-blank fields."></textarea>
+        <div class="hint">Wrap fill-in fields in square brackets, like <code>[LANGUAGE]</code> or <code>[FILE_NAME]</code> — they'll automatically become editable fields wherever this workflow is opened.</div>
+      </div>
+      <div class="field">
+        <label>Tags <span style="font-weight:400;color:var(--text-faint);">(comma separated)</span></label>
+        <input class="input" id="editorTags" placeholder="e.g. code review, python, debugging">
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" onclick="closeModal('editorModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEditorWorkflow()">Save workflow</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+  <span id="toastText">Copied to clipboard</span>
+</div>
+
+<script>
+/* ==================================================================
+   DATA MODEL
+================================================================== */
+const CATEGORIES = [
+  {id:'code-review', name:'Code Review & Refactoring', desc:'Templates for getting thorough, consistent reviews and safe refactors instead of surface-level comments.', icon:'review'},
+  {id:'debugging', name:'Writing & Debugging Code', desc:'Structured prompts for root-causing bugs and generating code that actually matches your constraints.', icon:'bug'},
+  {id:'learning', name:'Learning New Tech & Concepts', desc:'Templates for getting explanations calibrated to your level instead of generic tutorials.', icon:'learn'},
+  {id:'custom', name:'Custom', desc:'Workflows you built yourself in the Prompt Builder or Loop Builder, or created from scratch.', icon:'custom'}
+];
+
+const DEFAULT_WORKFLOWS = [
+  {
+    id:'wf-pr-review', category:'code-review', name:'Pull Request Deep Review',
+    desc:'A structured review pass that checks correctness, edge cases, security, and style — not just a glance.',
+    tags:['code review','pull request','quality'],
+    template:`You are reviewing a pull request as a senior engineer with deep expertise in [LANGUAGE/FRAMEWORK].
+
+Context: [WHAT THIS PR DOES / TICKET LINK]
+
+Review the diff below for, in this order:
+1. Correctness — logic errors, off-by-one issues, incorrect assumptions
+2. Edge cases — nulls, empty inputs, concurrency, large inputs
+3. Security — injection, auth, secrets, unsafe deserialization
+4. Style & consistency — does it match [STYLE GUIDE / CONVENTION]
+5. Maintainability — naming, complexity, test coverage gaps
+
+For each issue: quote the exact line, explain why it's a problem, and suggest a concrete fix. Do not comment on purely stylistic nitpicks unless they violate [STYLE GUIDE].
+
+Diff:
+[PASTE DIFF HERE]`
+  },
+  {
+    id:'wf-refactor', category:'code-review', name:'Safe Refactor Plan',
+    desc:'Get a refactor broken into small, reviewable, behavior-preserving steps instead of one giant rewrite.',
+    tags:['refactoring','planning'],
+    template:`Act as a staff engineer planning a refactor of the code below.
+
+Goal of the refactor: [e.g. reduce complexity, extract reusable logic, improve testability]
+Constraints: must NOT change external behavior/API. Language: [LANGUAGE]. Existing tests: [DESCRIBE OR PASTE]
+
+1. First, list the specific code smells you see (be concrete, cite lines).
+2. Propose a refactor plan broken into small, independently reviewable steps, ordered from lowest to highest risk.
+3. For each step, state what could break and how to verify it didn't (e.g. which existing test should still pass).
+4. Do not implement all steps at once — wait for me to confirm before writing code for a given step.
+
+Code:
+[PASTE CODE HERE]`
+  },
+  {
+    id:'wf-debug', category:'debugging', name:'Root-Cause Debugger',
+    desc:'Forces the AI to reason about the actual root cause before suggesting a fix, instead of guessing.',
+    tags:['debugging','bug fix'],
+    template:`You are helping me debug an issue. Do not propose a fix until you've completed the diagnostic steps below.
+
+Symptom: [WHAT'S HAPPENING, INCLUDING ERROR MESSAGE/STACK TRACE]
+Expected behavior: [WHAT SHOULD HAPPEN INSTEAD]
+Environment: [LANGUAGE, FRAMEWORK, VERSION]
+What I've already ruled out: [ANYTHING YOU'VE CHECKED]
+
+Steps:
+1. List 3-5 plausible root causes, ranked by likelihood, with your reasoning for each.
+2. For the top 2 candidates, tell me exactly what to check or log to confirm/deny them.
+3. Only after I confirm the cause, propose the minimal fix — do not fix unrelated code.
+
+Relevant code:
+[PASTE CODE HERE]`
+  },
+  {
+    id:'wf-codegen', category:'debugging', name:'Spec-Constrained Code Generation',
+    desc:'Reduces inconsistent output by forcing explicit constraints and a self-check before the AI hands back code.',
+    tags:['code generation','consistency'],
+    template:`Write [LANGUAGE] code that does the following: [WHAT IT SHOULD DO]
+
+Hard constraints (do not violate these):
+- Must follow [STYLE GUIDE / LINTER RULES]
+- Must handle these edge cases: [EDGE CASES]
+- Performance/complexity requirement: [e.g. O(n log n), no external deps]
+- Must NOT: [THINGS TO AVOID, e.g. use a specific library]
+
+Before giving the final answer, silently check your draft against every constraint above and fix any violations. Then output:
+1. The final code in a single code block
+2. A one-line note on any tradeoff you made
+3. One test case that would catch a likely mistake`
+  },
+  {
+    id:'wf-explain', category:'learning', name:'Calibrated Concept Explainer',
+    desc:'Gets explanations pitched at your actual level, with a check that you understood before moving on.',
+    tags:['learning','explanation'],
+    template:`Explain [CONCEPT/TECHNOLOGY] to me.
+
+My background: experienced software engineer, familiar with [RELATED THINGS YOU ALREADY KNOW], new to [WHAT'S ACTUALLY NEW HERE].
+
+Requirements:
+1. Start with the one-sentence "what problem does this solve" — skip generic history/marketing.
+2. Explain it by relating it to [SOMETHING YOU ALREADY KNOW, e.g. a concept from another language/tool], not from first principles.
+3. Give one minimal, realistic code example — not "hello world."
+4. Call out the #1 mistake engineers make when first using this.
+5. End with 2 questions to check I actually understood it — don't just ask "does this make sense?"`
+  },
+  {
+    id:'wf-techeval', category:'learning', name:'New Tech Evaluation',
+    desc:'A structured way to decide whether a new library/tool/pattern is worth adopting, instead of a hype summary.',
+    tags:['learning','decision making'],
+    template:`I'm evaluating whether to adopt [TECHNOLOGY/LIBRARY] for [USE CASE / PROJECT CONTEXT].
+
+Current approach: [WHAT WE USE TODAY, IF ANYTHING]
+Constraints: [TEAM SIZE, PERFORMANCE NEEDS, TIMELINE, EXISTING STACK]
+
+Give me:
+1. What specific problem this solves better than [CURRENT APPROACH] — be concrete, not generic marketing points
+2. The real costs: learning curve, migration effort, maturity/community risk, bundle size or performance overhead if relevant
+3. A honest "don't adopt this if..." condition
+4. Your recommendation given my constraints above, with the single strongest argument against your own recommendation`
+  }
+];
+
+const BLOCK_DEFS = {
+  role:        {label:'Role', badge:'RO', desc:"Tells the AI what expertise/perspective to answer from. Fixes tone and depth so answers don't swing between casual and expert-level randomly.", type:'select', options:['Senior software engineer','Staff/principal engineer','Security-focused code reviewer','Patient technical mentor','Skeptical code reviewer who assumes bugs exist','Custom (type below)']},
+  objective:   {label:'Objective', badge:'OB', desc:"The single, specific outcome you want. Vague objectives are the #1 cause of inconsistent output — this block forces you to state it plainly.", type:'text', placeholder:'e.g. Find all edge-case bugs in this function before it ships'},
+  context:     {label:'Context', badge:'CX', desc:"Background the AI needs but shouldn't guess at — your stack, constraints, prior attempts. Prevents answers that ignore your real situation.", type:'textarea', placeholder:'e.g. This is a Node.js service handling payment webhooks, using TypeScript strict mode...'},
+  constraints: {label:'Constraints', badge:'CN', desc:"Hard rules the AI must not break (style guide, banned approaches, scope limits). This is what keeps output from drifting outside what's usable.", type:'textarea', placeholder:'e.g. Must not add new dependencies. Must match existing naming convention.'},
+  reasoning:   {label:'Reasoning strategy', badge:'RS', desc:"How the AI should think before answering — e.g. step-by-step, or list options before picking one. Improves quality on non-trivial tasks by preventing jumped-to conclusions.", type:'select', options:['Think step-by-step before answering','List 2-3 approaches, then pick and justify the best one','Identify assumptions first, then answer',"Play devil's advocate against your own first answer",'No special reasoning needed']},
+  output:      {label:'Output format', badge:'OF', desc:"The exact shape you want back (code block, numbered list, table). This alone fixes most 'why is this formatted differently every time' frustration.", type:'select', options:['Single code block only, no explanation','Code block + short explanation below','Numbered list of findings','Table with columns you specify','Step-by-step plan, no code yet']},
+  tone:        {label:'Tone', badge:'TN', desc:"The register of the response. Matters more than people expect — a blunt tone surfaces problems faster than a hedging, agreeable one.", type:'select', options:['Direct and blunt — flag problems plainly','Neutral and professional','Encouraging, for learning contexts','Terse — minimal words, maximum signal']},
+  examples:    {label:'Examples', badge:'EX', desc:"One or two examples of the input/output pattern you want. The single highest-leverage way to reduce variance in output, especially for formatting.", type:'textarea', placeholder:'e.g. Input: [sample] → Output: [what a good answer looks like]'},
+  qualitycheck:{label:'Quality check', badge:'QC', desc:"Tells the AI to verify its own draft against a checklist before showing it to you — catches obvious misses before they reach you.", type:'textarea', placeholder:'e.g. Before answering, check: did you cover null inputs? Did you cite line numbers?'}
+};
+const PB_ORDER = ['role','objective','context','constraints','reasoning','output','tone','examples','qualitycheck'];
+
+const LOOP_CRITERIA = ['Technically correct','No edge cases missed','Matches style guide','Secure / no vulnerabilities introduced','Concise — no unnecessary content','Fully addresses the original request','Includes reasoning, not just conclusions','Passes a "would a senior eng approve this" test'];
+const LOOP_STOP = ['All criteria are met','Max iterations reached','No further improvement found between passes','A criterion requires info only I can provide','Confidence in the answer exceeds ~95%'];
+const LOOP_SAFETY = ['Never change the scope of the original request','Never fabricate test results, benchmarks, or sources','Ask me before making an irreversible/destructive change','Show me what changed between each iteration, not just the final result','Stop and ask if a stop condition is ambiguous rather than guessing'];
+
+/* ==================================================================
+   STATE
+================================================================== */
+let state = {
+  workflows: [],
+  favorites: [],
+  theme: 'dark',
+  seenOnboarding: false,
+  explainerDismissed: false
+};
+
+function loadState(){
+  const saved = localStorage.getItem('aiPlaybookState');
+  if(saved){
+    try{ state = Object.assign(state, JSON.parse(saved)); }catch(e){}
+  }
+  if(!state.workflows || state.workflows.length===0){
+    state.workflows = JSON.parse(JSON.stringify(DEFAULT_WORKFLOWS)).map(w=>({...w, favorite:false, createdAt:Date.now()}));
+  }
+}
+function saveState(){ localStorage.setItem('aiPlaybookState', JSON.stringify(state)); }
+
+/* ==================================================================
+   INIT
+================================================================== */
+document.addEventListener('DOMContentLoaded', ()=>{
+  loadState();
+  applyTheme();
+  if(!state.seenOnboarding){ document.getElementById('onbOverlay').style.display='flex'; }
+  else { document.getElementById('onbOverlay').style.display='none'; }
+  if(state.explainerDismissed){ document.getElementById('explainerBanner').style.display='none'; }
+
+  buildCategorySelect();
+  buildCategoryFilters();
+  renderWorkflows();
+  renderFavorites();
+  renderStats();
+  buildPromptBuilderBlockList();
+  renderPBCanvas();
+  buildLoopChips();
+  updateLoopPreview();
+  buildBlocksLibrary();
+
+  document.addEventListener('keydown', (e)=>{
+    if(e.key==='Escape'){ closeAllModals(); }
+    if(e.key==='/' && document.getElementById('view-workflows').classList.contains('active') && document.activeElement.tagName!=='INPUT' && document.activeElement.tagName!=='TEXTAREA'){
+      e.preventDefault(); document.getElementById('searchInput').focus();
+    }
+    if(e.key.toLowerCase()==='n' && document.activeElement.tagName!=='INPUT' && document.activeElement.tagName!=='TEXTAREA'){
+      openWorkflowEditor();
+    }
+    if(e.key==='?'){ openHelp(); }
+  });
+
+  ['loopBasePrompt','loopGoal','loopStrategy','loopMaxIter'].forEach(id=>{
+    document.getElementById(id).addEventListener('input', updateLoopPreview);
+  });
+});
+
+function closeOnboarding(){
+  state.seenOnboarding = true; saveState();
+  document.getElementById('onbOverlay').style.display='none';
+}
+function dismissExplainer(){
+  state.explainerDismissed = true; saveState();
+  document.getElementById('explainerBanner').style.display='none';
+}
+function openHelp(){ document.getElementById('helpModal').classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+function closeAllModals(){ document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.remove('open')); }
+
+function toggleTheme(){
+  state.theme = state.theme==='dark' ? 'light' : 'dark';
+  saveState(); applyTheme();
+}
+function applyTheme(){
+  if(state.theme==='light'){ document.documentElement.setAttribute('data-theme','light'); }
+  else{ document.documentElement.removeAttribute('data-theme'); }
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  document.getElementById('toastText').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(()=>t.classList.remove('show'), 2000);
+}
+
+function copyText(text, msg){
+  navigator.clipboard.writeText(text).then(()=>showToast(msg||'Copied to clipboard'));
+}
+
+/* ==================================================================
+   NAVIGATION
+================================================================== */
+const VIEW_TITLES = {dashboard:'Dashboard', workflows:'My Workflows', promptbuilder:'Prompt Builder', loopbuilder:'Loop Builder', blocks:'Building Blocks', favorites:'Favorites'};
+function showView(view){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+view).classList.add('active');
+  document.querySelectorAll('.nav-item[data-view]').forEach(n=>n.classList.toggle('active', n.dataset.view===view));
+  document.getElementById('topbarTitle').textContent = VIEW_TITLES[view];
+  document.getElementById('sidebar').classList.remove('open');
+  window.scrollTo(0,0);
+  if(view==='favorites') renderFavorites();
+}
+
+/* ==================================================================
+   CATEGORY UI
+================================================================== */
+function buildCategorySelect(){
+  const sel = document.getElementById('editorCategory');
+  sel.innerHTML = CATEGORIES.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+}
+let activeFilter = 'all';
+function buildCategoryFilters(){
+  const wrap = document.getElementById('categoryFilters');
+  wrap.innerHTML = `<button class="filter-pill active" data-cat="all" onclick="setFilter('all')">All</button>` +
+    CATEGORIES.map(c=>`<button class="filter-pill" data-cat="${c.id}" onclick="setFilter('${c.id}')">${c.name}</button>`).join('');
+}
+function setFilter(cat){
+  activeFilter = cat;
+  document.querySelectorAll('.filter-pill').forEach(p=>p.classList.toggle('active', p.dataset.cat===cat));
+  renderWorkflows();
+}
+
+/* ==================================================================
+   WORKFLOWS RENDER
+================================================================== */
+function renderStats(){
+  document.getElementById('statWorkflows').textContent = state.workflows.length;
+  document.getElementById('statFavorites').textContent = state.workflows.filter(w=>w.favorite).length;
+  document.getElementById('statCategories').textContent = new Set(state.workflows.map(w=>w.category)).size;
+}
+
+function renderWorkflows(){
+  const query = (document.getElementById('searchInput')?.value || '').toLowerCase();
+  const container = document.getElementById('workflowsContainer');
+  let cats = CATEGORIES.filter(c => activeFilter==='all' || c.id===activeFilter);
+  let html = '';
+  let totalShown = 0;
+
+  cats.forEach(cat=>{
+    let items = state.workflows.filter(w=>w.category===cat.id);
+    if(query){
+      items = items.filter(w =>
+        w.name.toLowerCase().includes(query) ||
+        w.desc.toLowerCase().includes(query) ||
+        w.tags.join(' ').toLowerCase().includes(query) ||
+        w.template.toLowerCase().includes(query)
+      );
+    }
+    if(items.length===0) return;
+    totalShown += items.length;
+    html += `<div class="category-block">
+      <div class="category-head"><h2>${cat.name} <span class="count">${items.length}</span></h2></div>
+      <div class="category-desc">${cat.desc}</div>
+      <div class="grid grid-3">
+        ${items.map(w=>workflowCardHTML(w)).join('')}
+      </div>
+    </div>`;
+  });
+
+  if(totalShown===0){
+    html = `<div class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <h3>No workflows found</h3>
+      <p>Try a different search term, clear the category filter, or create a new workflow from scratch.</p>
+    </div>`;
+  }
+  container.innerHTML = html;
+  renderStats();
+}
+
+function workflowCardHTML(w){
+  return `<div class="workflow-card">
+    <div class="wf-top">
+      <div class="wf-title">${escapeHTML(w.name)}</div>
+      <button class="wf-fav ${w.favorite?'active':''}" onclick="toggleFavorite('${w.id}')" title="Favorite">
+        <svg viewBox="0 0 24 24" fill="${w.favorite?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="m12 17.3-6.2 3.6 1.6-7-5.4-4.7 7.1-.6L12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7z"/></svg>
+      </button>
+    </div>
+    <div class="wf-desc">${escapeHTML(w.desc)}</div>
+    <div class="wf-tags">${w.tags.map(t=>`<span class="tag">${escapeHTML(t)}</span>`).join('')}</div>
+    <div class="wf-actions">
+      <button class="btn btn-sm btn-primary" onclick="openWorkflowView('${w.id}')">Open</button>
+      <button class="btn btn-sm" onclick="duplicateWorkflow('${w.id}')">Duplicate</button>
+      <button class="btn btn-sm" onclick="openWorkflowEditor('${w.id}')">Edit</button>
+      <button class="btn btn-sm btn-ghost" onclick="deleteWorkflow('${w.id}')" title="Delete">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>
+      </button>
+    </div>
+  </div>`;
+}
+
+function renderFavorites(){
+  const favs = state.workflows.filter(w=>w.favorite);
+  const container = document.getElementById('favoritesContainer');
+  if(favs.length===0){
+    container.innerHTML = `<div class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m12 17.3-6.2 3.6 1.6-7-5.4-4.7 7.1-.6L12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7z"/></svg>
+      <h3>No favorites yet</h3>
+      <p>Star a workflow from "My Workflows" to pin it here for quick access.</p>
+    </div>`;
+    return;
+  }
+  container.innerHTML = `<div class="grid grid-3">${favs.map(w=>workflowCardHTML(w)).join('')}</div>`;
+}
+
+function toggleFavorite(id){
+  const w = state.workflows.find(x=>x.id===id);
+  w.favorite = !w.favorite;
+  saveState(); renderWorkflows(); renderFavorites();
+}
+
+function deleteWorkflow(id){
+  if(!confirm('Delete this workflow? This cannot be undone.')) return;
+  state.workflows = state.workflows.filter(w=>w.id!==id);
+  saveState(); renderWorkflows(); renderFavorites();
+}
+
+function duplicateWorkflow(id){
+  const w = state.workflows.find(x=>x.id===id);
+  const copy = {...w, id:'wf-'+Date.now(), name:w.name+' (copy)', favorite:false, createdAt:Date.now()};
+  state.workflows.unshift(copy);
+  saveState(); renderWorkflows();
+  showToast('Workflow duplicated');
+}
+
+/* ==================================================================
+   WORKFLOW EDITOR (create / edit)
+================================================================== */
+function openWorkflowEditor(id){
+  document.getElementById('editorId').value = id || '';
+  if(id){
+    const w = state.workflows.find(x=>x.id===id);
+    document.getElementById('editorTitle').textContent = 'Edit workflow';
+    document.getElementById('editorName').value = w.name;
+    document.getElementById('editorCategory').value = w.category;
+    document.getElementById('editorDesc').value = w.desc;
+    document.getElementById('editorTemplate').value = w.template;
+    document.getElementById('editorTags').value = w.tags.join(', ');
+  } else {
+    document.getElementById('editorTitle').textContent = 'New workflow';
+    document.getElementById('editorName').value = '';
+    document.getElementById('editorCategory').value = 'custom';
+    document.getElementById('editorDesc').value = '';
+    document.getElementById('editorTemplate').value = '';
+    document.getElementById('editorTags').value = '';
+  }
+  document.getElementById('editorModal').classList.add('open');
+}
+
+function saveEditorWorkflow(){
+  const id = document.getElementById('editorId').value;
+  const name = document.getElementById('editorName').value.trim();
+  if(!name){ alert('Please give the workflow a name.'); return; }
+  const data = {
+    name,
+    category: document.getElementById('editorCategory').value,
+    desc: document.getElementById('editorDesc').value.trim() || 'Custom workflow.',
+    template: document.getElementById('editorTemplate').value,
+    tags: document.getElementById('editorTags').value.split(',').map(t=>t.trim()).filter(Boolean)
+  };
+  if(id){
+    const w = state.workflows.find(x=>x.id===id);
+    Object.assign(w, data);
+  } else {
+    state.workflows.unshift({id:'wf-'+Date.now(), favorite:false, createdAt:Date.now(), ...data});
+  }
+  saveState();
+  closeModal('editorModal');
+  renderWorkflows(); renderFavorites();
+  showToast('Workflow saved');
+}
+
+/* ==================================================================
+   WORKFLOW VIEW (fill variables + copy)
+================================================================== */
+function extractVars(template){
+  const matches = template.match(/\[([A-Z0-9_ \/'-]+)\]/g) || [];
+  return [...new Set(matches.map(m=>m.slice(1,-1)))];
+}
+
+function openWorkflowView(id){
+  const w = state.workflows.find(x=>x.id===id);
+  const vars = extractVars(w.template);
+  document.getElementById('wfModalTitle').textContent = w.name;
+  document.getElementById('wfModalSub').textContent = w.desc;
+
+  let fieldsHTML = '';
+  if(vars.length){
+    fieldsHTML = `<div class="field"><label>Fill in the variables</label>` +
+      vars.map(v=>`<div style="margin-bottom:8px;">
+        <label style="font-size:11px; color:var(--text-faint); font-weight:500;">${escapeHTML(v)}</label>
+        <input class="input" data-var="${escapeHTML(v)}" oninput="updateWFPreview('${w.id}')" placeholder="Enter value for ${escapeHTML(v)}">
+      </div>`).join('') + `</div><hr class="div">`;
+  }
+
+  document.getElementById('wfModalBody').innerHTML = fieldsHTML + `
+    <div class="field" style="margin-bottom:0;">
+      <label>Preview</label>
+      <pre id="wfPreviewPre" class="mono" style="white-space:pre-wrap; font-size:12.5px; line-height:1.7; background:var(--panel-2); border:1px solid var(--border); border-radius:8px; padding:14px; max-height:300px; overflow-y:auto; color:var(--text-dim);"></pre>
+    </div>`;
+
+  document.getElementById('wfModalFoot').innerHTML = `
+    <button class="btn" onclick="closeModal('workflowModal')">Close</button>
+    <button class="btn btn-primary" onclick="copyWFPreview()">
+      Copy prompt
+    </button>`;
+
+  updateWFPreview(w.id);
+  document.getElementById('workflowModal').classList.add('open');
+}
+
+function updateWFPreview(id){
+  const w = state.workflows.find(x=>x.id===id);
+  let text = w.template;
+  document.querySelectorAll('#wfModalBody [data-var]').forEach(inp=>{
+    const v = inp.dataset.var;
+    const val = inp.value.trim();
+    if(val){
+      text = text.split(`[${v}]`).join(val);
+    }
+  });
+  document.getElementById('wfPreviewPre').textContent = text;
+}
+
+function copyWFPreview(){
+  copyText(document.getElementById('wfPreviewPre').textContent, 'Prompt copied to clipboard');
+}
+
+/* ==================================================================
+   PROMPT BUILDER
+================================================================== */
+let pbBlocks = []; // array of {key, value, extra}
+
+function buildPromptBuilderBlockList(){
+  const wrap = document.getElementById('pbBlockList');
+  wrap.innerHTML = PB_ORDER.map(key=>{
+    const def = BLOCK_DEFS[key];
+    return `<div class="block-option" id="pbopt-${key}" onclick="addPBBlock('${key}')">
+      <div class="block-option-top">
+        <b>${def.label}</b>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
+      </div>
+      <p>${def.desc}</p>
+    </div>`;
+  }).join('');
+}
+
+function addPBBlock(key){
+  if(pbBlocks.find(b=>b.key===key)) return;
+  const def = BLOCK_DEFS[key];
+  pbBlocks.push({key, value: def.type==='select' ? def.options[0] : ''});
+  document.getElementById('pbopt-'+key).classList.add('added');
+  renderPBCanvas();
+}
+function removePBBlock(key){
+  pbBlocks = pbBlocks.filter(b=>b.key!==key);
+  document.getElementById('pbopt-'+key)?.classList.remove('added');
+  renderPBCanvas();
+}
+function movePBBlock(key, dir){
+  const idx = pbBlocks.findIndex(b=>b.key===key);
+  const newIdx = idx+dir;
+  if(newIdx<0 || newIdx>=pbBlocks.length) return;
+  [pbBlocks[idx], pbBlocks[newIdx]] = [pbBlocks[newIdx], pbBlocks[idx]];
+  renderPBCanvas();
+}
+function updatePBValue(key, value){
+  const b = pbBlocks.find(x=>x.key===key);
+  b.value = value;
+  updatePBPreview();
+}
+
+function renderPBCanvas(){
+  const wrap = document.getElementById('pbCanvasBody');
+  if(pbBlocks.length===0){
+    wrap.innerHTML = `<div class="pb-empty">No blocks added yet.<br>Click a block on the left — like <b>Role</b> or <b>Objective</b> — to start building your prompt.</div>`;
+    updatePBPreview();
+    return;
+  }
+  wrap.innerHTML = pbBlocks.map((b,i)=>{
+    const def = BLOCK_DEFS[b.key];
+    let fieldHTML = '';
+    if(def.type==='select'){
+      fieldHTML = `<select class="input" onchange="updatePBValue('${b.key}', this.value)">${def.options.map(o=>`<option ${o===b.value?'selected':''}>${o}</option>`).join('')}</select>`;
+      if(b.value==='Custom (type below)'){
+        fieldHTML += `<textarea class="textarea" placeholder="Describe the custom role..." oninput="updatePBExtra('${b.key}', this.value)"></textarea>`;
+      }
+    } else if(def.type==='textarea'){
+      fieldHTML = `<textarea class="textarea" placeholder="${def.placeholder||''}" oninput="updatePBValue('${b.key}', this.value)">${escapeHTML(b.value)}</textarea>`;
+    } else {
+      fieldHTML = `<input class="input" placeholder="${def.placeholder||''}" value="${escapeHTML(b.value)}" oninput="updatePBValue('${b.key}', this.value)">`;
+    }
+    return `<div class="assembled-block">
+      <div class="assembled-block-head">
+        <div class="ab-title-wrap">
+          <div class="ab-badge">${def.badge}</div>
+          <div class="ab-title-txt"><b>${def.label}</b><span>${def.desc}</span></div>
+        </div>
+        <div class="ab-controls">
+          <button class="ab-icon-btn" onclick="movePBBlock('${b.key}', -1)" title="Move up">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m18 15-6-6-6 6"/></svg>
+          </button>
+          <button class="ab-icon-btn" onclick="movePBBlock('${b.key}', 1)" title="Move down">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <button class="ab-icon-btn" onclick="removePBBlock('${b.key}')" title="Remove">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="assembled-block-body">${fieldHTML}</div>
+    </div>`;
+  }).join('');
+  updatePBPreview();
+}
+function updatePBExtra(key, val){
+  const b = pbBlocks.find(x=>x.key===key);
+  b.extra = val;
+  updatePBPreview();
+}
+
+function buildPBText(){
+  if(pbBlocks.length===0) return '';
+  let lines = [];
+  pbBlocks.forEach(b=>{
+    const def = BLOCK_DEFS[b.key];
+    let val = b.value;
+    if(val==='Custom (type below)' && b.extra) val = b.extra;
+    if(!val) return;
+    lines.push(`${def.label.toUpperCase()}:\n${val}`);
+  });
+  return lines.join('\n\n');
+}
+
+function updatePBPreview(){
+  const text = buildPBText();
+  document.getElementById('pbPreviewText').textContent = text || 'Add blocks on the left to see your prompt build up here.';
+}
+function copyPBPreview(){
+  const text = buildPBText();
+  if(!text){ showToast('Add at least one block first'); return; }
+  copyText(text, 'Prompt copied to clipboard');
+}
+function clearPromptBuilder(){
+  pbBlocks.forEach(b=>document.getElementById('pbopt-'+b.key)?.classList.remove('added'));
+  pbBlocks = [];
+  renderPBCanvas();
+}
+function savePBAsWorkflow(){
+  const text = buildPBText();
+  if(!text){ showToast('Add at least one block first'); return; }
+  const name = prompt('Name this workflow:', 'Custom prompt');
+  if(!name) return;
+  state.workflows.unshift({
+    id:'wf-'+Date.now(), category:'custom', name, favorite:false, createdAt:Date.now(),
+    desc:'Built with the Prompt Builder.', tags:['prompt builder'], template:text
+  });
+  saveState();
+  showToast('Saved to My Workflows');
+}
+
+/* ==================================================================
+   LOOP BUILDER
+================================================================== */
+let loopCriteria = new Set(['Technically correct','No edge cases missed','Fully addresses the original request']);
+let loopStop = new Set(['All criteria are met','Max iterations reached']);
+let loopSafety = new Set(['Never change the scope of the original request','Show me what changed between each iteration, not just the final result']);
+
+function buildLoopChips(){
+  document.getElementById('loopCriteriaChips').innerHTML = LOOP_CRITERIA.map(c=>chipHTML(c, loopCriteria.has(c), 'criteria')).join('');
+  document.getElementById('loopStopChips').innerHTML = LOOP_STOP.map(c=>chipHTML(c, loopStop.has(c), 'stop')).join('');
+  document.getElementById('loopSafetyChips').innerHTML = LOOP_SAFETY.map(c=>chipHTML(c, loopSafety.has(c), 'safety')).join('');
+}
+function chipHTML(text, active, group){
+  return `<button class="chip ${active?'selected':''}" onclick="toggleLoopChip('${group}', this)">${text}</button>`;
+}
+function toggleLoopChip(group, el){
+  const text = el.textContent;
+  const set = group==='criteria'?loopCriteria : group==='stop'?loopStop : loopSafety;
+  if(set.has(text)) set.delete(text); else set.add(text);
+  el.classList.toggle('selected');
+  updateLoopPreview();
+}
+document.getElementById && document.addEventListener('change', (e)=>{
+  if(e.target.id==='loopStrategy') updateLoopPreview();
+});
+
+function buildLoopText(){
+  const base = document.getElementById('loopBasePrompt').value.trim();
+  const goal = document.getElementById('loopGoal').value.trim();
+  const strategySel = document.getElementById('loopStrategy');
+  const strategy = strategySel.options[strategySel.selectedIndex].text;
+  const maxIter = document.getElementById('loopMaxIter').value || 3;
+
+  let out = `${base}\n\n---\nRun this as a self-correcting loop instead of a single pass:\n\n`;
+  out += `GOAL:\n${goal || '(not set)'}\n\n`;
+  out += `PROCESS:\n1. Produce a draft response.\n2. Evaluate your own draft against this checklist:\n`;
+  [...loopCriteria].forEach(c=> out += `   - ${c}\n`);
+  out += `3. If any item fails, revise using this strategy: ${strategy}\n`;
+  out += `4. Repeat from step 2.\n\n`;
+  out += `STOP WHEN:\n`;
+  [...loopStop].forEach(c=> out += `- ${c}\n`);
+  out += `- Hard limit: never exceed ${maxIter} iterations.\n\n`;
+  out += `SAFETY RULES:\n`;
+  [...loopSafety].forEach(c=> out += `- ${c}\n`);
+  out += `\nWhen you finish, show me: the final answer, how many iterations it took, and the specific issue each revision fixed.`;
+  return out;
+}
+function updateLoopPreview(){
+  document.getElementById('loopPreviewText').textContent = buildLoopText();
+}
+function copyLoopPreview(){
+  copyText(buildLoopText(), 'Loop prompt copied to clipboard');
+}
+function saveLoopAsWorkflow(){
+  const name = prompt('Name this loop workflow:', 'Self-checking review loop');
+  if(!name) return;
+  state.workflows.unshift({
+    id:'wf-'+Date.now(), category:'custom', name, favorite:false, createdAt:Date.now(),
+    desc:'Built with the Loop Builder — a self-checking, iterating prompt.', tags:['loop','autonomous'], template:buildLoopText()
+  });
+  saveState();
+  showToast('Saved to My Workflows');
+}
+
+/* ==================================================================
+   BLOCKS LIBRARY VIEW
+================================================================== */
+function buildBlocksLibrary(){
+  const wrap = document.getElementById('blocksLibraryContainer');
+  wrap.innerHTML = PB_ORDER.map(key=>{
+    const def = BLOCK_DEFS[key];
+    return `<div class="card">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+        <div class="ab-badge" style="width:26px;height:26px;font-size:11px;">${def.badge}</div>
+        <b style="font-size:14px;">${def.label}</b>
+      </div>
+      <p style="font-size:12.5px; color:var(--text-dim); line-height:1.6;">${def.desc}</p>
+    </div>`;
+  }).join('') + `
+  <div class="card" style="border-color:var(--amber-dim);">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+      <div class="ab-badge" style="width:26px;height:26px;font-size:11px; background:var(--amber-glow); color:var(--amber);">GL</div>
+      <b style="font-size:14px;">Goal (Loop Builder)</b>
+    </div>
+    <p style="font-size:12.5px; color:var(--text-dim); line-height:1.6;">Defines what "done" means for a loop. Without an explicit goal, iterative revision tends to optimize for the wrong thing.</p>
+  </div>
+  <div class="card" style="border-color:var(--amber-dim);">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+      <div class="ab-badge" style="width:26px;height:26px;font-size:11px; background:var(--amber-glow); color:var(--amber);">EC</div>
+      <b style="font-size:14px;">Evaluation Criteria (Loop Builder)</b>
+    </div>
+    <p style="font-size:12.5px; color:var(--text-dim); line-height:1.6;">The checklist the AI grades its own draft against each iteration. This is what actually drives the self-correction, not the base prompt.</p>
+  </div>
+  <div class="card" style="border-color:var(--amber-dim);">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+      <div class="ab-badge" style="width:26px;height:26px;font-size:11px; background:var(--amber-glow); color:var(--amber);">IS</div>
+      <b style="font-size:14px;">Improvement Strategy (Loop Builder)</b>
+    </div>
+    <p style="font-size:12.5px; color:var(--text-dim); line-height:1.6;">Controls how the AI edits between passes — full rewrite vs. targeted patch changes the risk and cost of each iteration.</p>
+  </div>
+  <div class="card" style="border-color:var(--amber-dim);">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+      <div class="ab-badge" style="width:26px;height:26px;font-size:11px; background:var(--amber-glow); color:var(--amber);">SC</div>
+      <b style="font-size:14px;">Stop Conditions (Loop Builder)</b>
+    </div>
+    <p style="font-size:12.5px; color:var(--text-dim); line-height:1.6;">Defines when the loop must end. Prevents runaway iteration and forces a concrete definition of "finished."</p>
+  </div>
+  <div class="card" style="border-color:var(--amber-dim);">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+      <div class="ab-badge" style="width:26px;height:26px;font-size:11px; background:var(--amber-glow); color:var(--amber);">SF</div>
+      <b style="font-size:14px;">Safety Rules (Loop Builder)</b>
+    </div>
+    <p style="font-size:12.5px; color:var(--text-dim); line-height:1.6;">Guardrails so autonomous iteration doesn't quietly expand scope, invent results, or make changes you can't review.</p>
+  </div>`;
+}
+
+/* ==================================================================
+   IMPORT / EXPORT
+================================================================== */
+function exportData(){
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'ai-playbook-export.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Data exported');
+}
+function importData(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev)=>{
+    try{
+      const data = JSON.parse(ev.target.result);
+      if(data.workflows){
+        state = Object.assign(state, data);
+        saveState();
+        buildCategoryFilters(); renderWorkflows(); renderFavorites(); renderStats();
+        showToast('Data imported successfully');
+      } else {
+        showToast('Invalid file format');
+      }
+    }catch(err){ showToast('Could not read file'); }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+/* ==================================================================
+   UTIL
+================================================================== */
+function escapeHTML(str){
+  if(str===undefined || str===null) return '';
+  return String(str).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+document.querySelectorAll('.modal-overlay').forEach(m=>{
+  m.addEventListener('click', (e)=>{ if(e.target===m) m.classList.remove('open'); });
+});
+</script>
+</body>
+</html>
